@@ -3,6 +3,7 @@ import { connect, styled } from "frontity";
 import Link from "./link";
 import List from "./list";
 import FeaturedMedia from "./featured-media";
+import Comments from "./Comments";
 
 const Post = ({ state, actions, libraries }) => {
   // Get information about the current URL.
@@ -61,6 +62,9 @@ const Post = ({ state, actions, libraries }) => {
       <Content>
         <Html2React html={post.content.rendered} />
       </Content>
+      <Commentsection>
+      {state.frontity.platform === "client" && data.isPost && <Comments />}
+      </Commentsection>
     </Container>
   ) : null;
 };
@@ -95,7 +99,11 @@ const Fecha = styled.p`
   font-size: 0.9em;
   display: inline;
 `;
-
+const Commentsection = styled.div`
+    margin: 0;
+    margin-top: 24px;
+    margin-bottom: 8px;
+`;
 /**
  * This component is the parent of the `content.rendered` HTML. We can use nested
  * selectors to style that HTML.
