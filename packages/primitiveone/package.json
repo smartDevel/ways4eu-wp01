@@ -1,0 +1,71 @@
+{
+  "_from": "primitiveone",
+  "_id": "primitiveone@1.0.9",
+  "_inBundle": false,
+  "_integrity": "sha512-oTR6uD8DexA5UwC+97rUCvOWhlLOg3sZvzcnVv57sEFadylayOi34lFZmL/NV7MQMy4QGUoWjm/G52Ke4q7FIA==",
+  "_location": "/primitiveone",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "primitiveone",
+    "name": "primitiveone",
+    "escapedName": "primitiveone",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/primitiveone/-/primitiveone-1.0.9.tgz",
+  "_shasum": "4fe55a5dd224f027a0691b9716b12e28572d74c6",
+  "_spec": "primitiveone",
+  "_where": "C:\\Users\\Herby\\frontity\\ways4euwp-01",
+  "author": {
+    "name": "Shaun Knowles"
+  },
+  "bugs": {
+    "url": "https://github.com/primitiveshaun/primitiveone/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@frontity/components": "^1.1.12",
+    "@frontity/html2react": "^1.1.12",
+    "@frontity/yoast": "^1.1.3",
+    "bootstrap": "^4.3.1",
+    "frontity": "^1.4.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0",
+    "react-bootstrap": "^1.0.0-beta.12",
+    "react-ga": "^2.7.0",
+    "react-gsap": "^1.2.0",
+    "react-scrollmagic": "^2.1.1",
+    "react-spinners": "^0.6.1"
+  },
+  "deprecated": false,
+  "description": "Primitive One - Built with Frontity",
+  "homepage": "https://primitivedigital.uk",
+  "keywords": [
+    "frontity",
+    "primitivedigital",
+    "frontity-theme",
+    "frontity-amp",
+    "headless",
+    "decoupled",
+    "rest",
+    "theme"
+  ],
+  "license": "Apache-2.0",
+  "name": "primitiveone",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/primitiveshaun/primitiveone.git"
+  },
+  "version": "1.0.9"
+}
