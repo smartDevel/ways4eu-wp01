@@ -3,6 +3,7 @@ import { connect, styled } from "frontity";
 import Link from "./link";
 import Nav from "./nav";
 import MobileMenu from "./menu";
+import Toggle from "./toggle";
 
 const Header = ({ state }) => {
   return (
@@ -12,6 +13,7 @@ const Header = ({ state }) => {
           <Title>{state.frontity.title}</Title>
         </StyledLink>
         <Description>{state.frontity.description}</Description>
+        <Toggle />
         <MobileMenu />
       </Container>
       <Nav />

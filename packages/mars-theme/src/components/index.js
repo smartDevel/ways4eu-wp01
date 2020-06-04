@@ -15,12 +15,14 @@ import PageError from "./page-error";
 const Theme = ({ state }) => {
   // Get information about the current URL.
   const data = state.source.get(state.router.link);
+  const { mode } = state.theme;
 
   return (
     <>
       {/* Add some metatags to the <head> of the HTML. */}
       <Title />
       <Head>
+      <title>{state.frontity.title}</title>
         <meta name="description" content={state.frontity.description} />
         <html lang="en" />
       </Head>
@@ -28,6 +30,11 @@ const Theme = ({ state }) => {
       {/* Add some global styles for the whole site, like body or a's. 
       Not classes here because we use CSS-in-JS. Only global HTML tags. */}
       <Global styles={globalStyles} />
+      <Global styles={ css`
+        body {
+            background-color: ${mode === 'light' ? '#fff': '#222'};
+            color: ${mode === 'light' ? '#222': '#fff'}
+        }` } />
 
       {/* Add the header of the site. */}
       <HeadContainer>
