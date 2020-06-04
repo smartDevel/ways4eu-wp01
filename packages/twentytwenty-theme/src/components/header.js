@@ -9,7 +9,12 @@ import MobileMenuButton from "./mobile/menu-button";
 import MobileMenuModal from "./mobile/menu-modal";
 
 const Header = ({ state }) => {
-  const { title, description } = state.frontity;
+  //orig
+  //const { title, description } = state.frontity;
+
+// modified: url aus frontity.settings.js hinzugefügt
+  const { title, description, url } = state.frontity;
+  
   const { headerBg } = state.theme.colors;
 
   return (
@@ -22,7 +27,13 @@ const Header = ({ state }) => {
           {/* Heading and Description of the site */}
           <TitleGroup>
             <SiteTitle>
+              {/* orig:
               <StyledLink link="/">{title}</StyledLink>
+              */}
+
+              {/*Modified: url aus frontity.settings.js wird berücksichtigt */}
+              <StyledLink link={url}>{title}</StyledLink>
+              
             </SiteTitle>
             <SiteDescription>{description}</SiteDescription>
           </TitleGroup>
