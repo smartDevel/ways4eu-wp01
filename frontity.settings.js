@@ -2,7 +2,7 @@ const settings = {
   name: "ways4euwp-01",
   state: {
     frontity: {
-      url: "https://ways4euwp-01.now.sh/",
+      url: "https://ways4eu.wordpress.com/",
       title: "Ways4eu WordPress.com Blog",
       description: "WordPress Site in Frontity development",
     },
