@@ -30,11 +30,12 @@ const Theme = ({ state }) => {
       {/* Add some global styles for the whole site, like body or a's. 
       Not classes here because we use CSS-in-JS. Only global HTML tags. */}
       <Global styles={globalStyles} />
-      <Global styles={ css`
+       <Global styles={ css`
         body {
-            background-color: ${mode === 'light' ? '#fff': '#222'};
-            color: ${mode === 'light' ? '#222': '#fff'}
+            background-color: ${mode === 'light' ? '#E0F8F7': '#A1ACAF'};
+            color: ${mode === 'light' ? '#A1ACAF': '#E0F8F7'};
         }` } />
+      
 
       {/* Add the header of the site. */}
       <HeadContainer>
