@@ -14,7 +14,12 @@ import FeaturedMedia from "../featured-media";
 const Item = ({ state, item }) => {
   const author = state.source.author[item.author];
   const date = new Date(item.date);
-
+  let rndExcerpt = false; //render ExcerptView nur wenn excerpt vorhanden und schalter auf standardview
+  if (state.theme.viewmode === "standardView") {
+    if (item.excerpt) {
+      rndExcerpt = true;
+    }
+  }
   return (
     <article>
       <Link link={item.link}>
@@ -45,7 +50,7 @@ const Item = ({ state, item }) => {
       )}
 
       {/* If the post has an excerpt (short summary text), we render it */}
-      {item.excerpt && (
+      {rndExcerpt && (
         <Excerpt dangerouslySetInnerHTML={{ __html: item.excerpt.rendered }} />
       )}
 
