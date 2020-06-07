@@ -48,6 +48,11 @@ const Item = ({ state, item }) => {
       {item.excerpt && (
         <Excerpt dangerouslySetInnerHTML={{ __html: item.excerpt.rendered }} />
       )}
+
+      {/* If fullViewMode enabled we render the whole content /// Wenn fullView aktiv dann immer kompletten content anzeigen */}
+      {state.theme.viewmode === "fullView" && (
+        <Excerpt dangerouslySetInnerHTML={{ __html: item.content.rendered }} />
+      )}
     </article>
   );
 };

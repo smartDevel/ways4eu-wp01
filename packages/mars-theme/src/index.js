@@ -17,11 +17,12 @@ const marsTheme = {
      * relevant state. It is scoped to the `theme` namespace.
      */
     theme: {
-      mode: 'light',
+      mode: "light",
+      viewmode: "standardView",
       menu: [],
       isMobileMenuOpen: false,
       featured: {
-        showOnList: false,
+        showOnList: true,
         showOnPost: false,
       },
     },
@@ -38,11 +39,21 @@ const marsTheme = {
       closeMobileMenu: ({ state }) => {
         state.theme.isMobileMenuOpen = false;
       },
-      setLightMode: ({state}) => {
-        state.theme.mode = 'light';
+
+      //actions zum toggeln zwischen light-mode und dark-mode Bildschirmanzeige
+      setLightMode: ({ state }) => {
+        state.theme.mode = "light";
       },
-      setDarkMode: ({state}) => {
-        state.theme.mode = 'dark';
+      setDarkMode: ({ state }) => {
+        state.theme.mode = "dark";
+      },
+
+      // actions zum togglen zwischen excerpt und fullview Listenansicht
+      setStandardView: ({ state }) => {
+        state.theme.viewmode = "standardView";
+      },
+      setFullView: ({ state }) => {
+        state.theme.viewmode = "fullView";
       },
     },
   },

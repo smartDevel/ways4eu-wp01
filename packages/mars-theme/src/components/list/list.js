@@ -2,6 +2,7 @@ import React from "react";
 import { connect, styled, decode } from "frontity";
 import Item from "./list-item";
 import Pagination from "./pagination";
+import ToggleViewmode from "../toggleViewmode";
 
 const List = ({ state }) => {
   // Get the data of the current list.
@@ -9,6 +10,8 @@ const List = ({ state }) => {
 
   return (
     <Container>
+      {/* Den Schalter für Excerpt - Fullview in Listenansicht einblenden  */}
+      <ToggleViewmode />
       {/* If the list is a taxonomy, we render a title. */}
       {data.isTaxonomy && (
         <Header>
