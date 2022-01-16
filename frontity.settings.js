@@ -4,7 +4,7 @@ const settings = {
     "frontity": {
       "url": "https://ways4eu.wordpress.com/",
       "title": "Ways4eu WordPress.com Blog",
-      "description": "WordPress Site in Frontity development"
+      "description": "SPA View of ways4eu.wordpress.com"
     }
   },
   "packages": [
