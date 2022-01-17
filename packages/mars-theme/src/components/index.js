@@ -17,7 +17,7 @@ import ReactGA from "react-ga";
  */
 const Theme = ({ state }) => {
   //SY20220117_5 Begin change --- Integrating Google-Analytics
-  ReactGA.initialize("G-41ZT5GHJY6");
+  ReactGA.initialize("UA-138142992-3");
   ReactGA.pageview(state.router.link);
   //SY20220117_5 End change --- Integrating Google-Analytics
 
