@@ -2,17 +2,17 @@ import Theme from "./components";
 import image from "@frontity/html2react/processors/image";
 import iframe from "@frontity/html2react/processors/iframe";
 //SY20220117 Begin change --- Meta-Tags added
-import { Head } from "frontity";
+// import { Head } from "frontity";
 
-const Theme = () => (
-    <Head>
-        <title>Music, Software-Development and more...</title>
-        <meta name="description" content="Please, handle with care !" />
-        <meta name="keywords" content="javascript, react, music, software, science" />
-        <html lang="en" />
-        <link rel="canonical" href="https://example.com" />
-    </Head>
-);
+// const Theme = () => (
+//     <Head>
+//         <title>Music, Software-Development and more...</title>
+//         <meta name="description" content="Please, handle with care !" />
+//         <meta name="keywords" content="javascript, react, music, software, science" />
+//         <html lang="en" />
+//         <link rel="canonical" href="https://example.com" />
+//     </Head>
+// );
 //SY20220117 End change --- Meta-Tags added
 
 const marsTheme = {

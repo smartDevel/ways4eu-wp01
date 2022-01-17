@@ -24,6 +24,9 @@ const Theme = ({ state }) => {
       <Head>
         <title>{state.frontity.title}</title>
         <meta name="description" content={state.frontity.description} />
+        {/* //SY20220117 Begin change --- Meta-Tags added */}
+        <meta name="keywords" content="javascript, react, music, software, science" />
+        {/* //SY20220117 End change --- Meta-Tags added */}
         <html lang="en" />
       </Head>
 
