@@ -7,12 +7,20 @@ import Post from "./post";
 import Loading from "./loading";
 import Title from "./title";
 import PageError from "./page-error";
+//SY20220117_5 Begin change --- Integrating Google-Analytics
+import ReactGA from "react-ga";
+//SY20220117_5 End change --- Integrating Google-Analytics
 
 /**
  * Theme is the root React component of our theme. The one we will export
  * in roots.
  */
 const Theme = ({ state }) => {
+  //SY20220117_5 Begin change --- Integrating Google-Analytics
+  ReactGA.initialize("G-41ZT5GHJY6");
+  ReactGA.pageview(state.router.link);
+  //SY20220117_5 End change --- Integrating Google-Analytics
+
   // Get information about the current URL.
   const data = state.source.get(state.router.link);
   const { mode } = state.theme;
