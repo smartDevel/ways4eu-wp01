@@ -12,6 +12,9 @@
     "serve": "frontity serve"
   },
   "prettier": {},
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@frontity/core": "^1.6.0",
     "@frontity/html2react": "^1.3.3",
@@ -25,4 +28,5 @@
     "primitiveone": "^1.0.9",
     "react-ga": "^3.3.0"
   }
+
 }
