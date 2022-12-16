@@ -19,7 +19,7 @@ const settings = {
             ],
             [
               "Rhymes",
-              "/category/daily-dose-of-rhymes"
+              "/tag/rhymes"
             ],
             [
               "Hot-React",
