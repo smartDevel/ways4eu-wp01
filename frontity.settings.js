@@ -32,7 +32,11 @@ const settings = {
             [
               "Fun",
               "/tag/fun"
-            ],                           
+            ],
+            [
+              "NASA",
+              "/category/nasa"
+            ],                                           
             [
               "Hot-React",
               "/category/hot-react"
@@ -56,11 +60,7 @@ const settings = {
             [
               "Wikipedia",
               "/category/wikipedia"
-            ],
-            [
-              "NASA",
-              "/category/nasa"
-            ]                                                                                             
+            ]                                                                                         
           ],
           "featured": {
             "showOnList": false,
