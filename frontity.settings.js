@@ -26,7 +26,7 @@ const settings = {
               "/category/tips_tricks"
             ],
             [
-              "Reading List",
+              "Reading-List",
               "/category/readinglist"
             ],
             [
