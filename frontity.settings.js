@@ -18,6 +18,10 @@ const settings = {
               "/"
             ],
             [
+              "Rhymes",
+              "/category/Daily dose of rhymes"
+            ],
+            [
               "Hot-React",
               "/category/hot-react"
             ],
