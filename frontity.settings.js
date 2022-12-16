@@ -22,6 +22,18 @@ const settings = {
               "/tag/rhymes"
             ],
             [
+              "Quotes",
+              "/tag/brainyquote"
+            ],
+            [
+              "Music",
+              "/tag/music"
+            ],
+            [
+              "Fun",
+              "/tag/fun"
+            ],                           
+            [
               "Hot-React",
               "/category/hot-react"
             ],
@@ -48,15 +60,7 @@ const settings = {
             [
               "NASA",
               "/category/nasa"
-            ],            
-            [
-              "Quotes",
-              "/tag/brainyquote"
-            ],                                                            
-            [
-              "Music",
-              "/tag/music"
-            ]            
+            ]                                                                                             
           ],
           "featured": {
             "showOnList": false,
