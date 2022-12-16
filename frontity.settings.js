@@ -50,8 +50,8 @@ const settings = {
               "/category/nasa"
             ],            
             [
-              "Art",
-              "/tag/art"
+              "Quotes",
+              "/tag/#dailyquotes"
             ],                                                            
             [
               "Music",
