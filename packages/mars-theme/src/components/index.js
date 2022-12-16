@@ -18,7 +18,9 @@ import ReactGA from "react-ga";
 const Theme = ({ state }) => {
   //SY20220117_5 Begin change --- Integrating Google-Analytics
   ReactGA.initialize("UA-138142992-3");
+  //console.log(ReactGA.initialize("UA-138142992-3", { debug: true }));
   ReactGA.pageview(state.router.link);
+  //console.log(state.router.link);
   //SY20220117_5 End change --- Integrating Google-Analytics
 
   // Get information about the current URL.
