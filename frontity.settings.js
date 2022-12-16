@@ -51,7 +51,7 @@ const settings = {
             ],            
             [
               "Quotes",
-              "/tag/#dailyquotes"
+              "/tag/brainyquote"
             ],                                                            
             [
               "Music",
