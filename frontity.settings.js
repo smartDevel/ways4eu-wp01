@@ -34,6 +34,10 @@ const settings = {
               "/tag/fun"
             ],
             [
+              "Interesting",
+              "/tag/interesting"
+            ],
+            [
               "NASA",
               "/category/nasa"
             ],                                           
