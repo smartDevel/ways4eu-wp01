@@ -66,6 +66,7 @@ const settings = {
               "/category/wikipedia"
             ]                                                                                         
           ],
+          showSearchInHeader: true,
           "featured": {
             "showOnList": false,
             "showOnPost": false
