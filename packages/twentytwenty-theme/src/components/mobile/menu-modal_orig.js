@@ -14,7 +14,6 @@ const MobileMenuModal = ({ state, actions }) => {
 
   // Check if there are links in the state
   const isThereLinks = menu != null && menu.length > 0;
-  console.log({menu, isThereLinks})
 
   /**
    * Keep a reference to the close button so we can focus on it when
@@ -55,21 +54,21 @@ const MobileMenuModal = ({ state, actions }) => {
               aria-label="Mobile menu links"
             >
               <MenuList>
-                  {isThereLinks &&
-                    menu.map(({name, href, subcategories}) => (
-                      <MenuListItem key={name}>
-                        <MenuLinkWrapper>
-                          <MenuLink
-                            link={href}
-                            aria-current={
-                              state.router.link === href ? "page" : undefined
-                            }
-                          >
-                            {name}
-                          </MenuLink>
-                        </MenuLinkWrapper>
-                      </MenuListItem>
-                    ))}
+                {isThereLinks &&
+                  menu.map(([name, link]) => (
+                    <MenuListItem key={name}>
+                      <MenuLinkWrapper>
+                        <MenuLink
+                          link={link}
+                          aria-current={
+                            state.router.link === link ? "page" : undefined
+                          }
+                        >
+                          {name}
+                        </MenuLink>
+                      </MenuLinkWrapper>
+                    </MenuListItem>
+                  ))}
               </MenuList>
             </MenuContent>
           </div>
@@ -90,6 +89,7 @@ const Modal = styled.div`
   right: 99999rem;
   top: 0;
   z-index: 99;
+
   &[data-open="true"] {
     display: flex;
     left: 0;
@@ -161,10 +161,12 @@ const MenuLink = styled(Link)`
   text-decoration: none;
   width: 100%;
   text-align: left;
+
   @media (min-width: 700px) {
     font-size: 2.4rem;
     padding: 2.5rem 0;
   }
+
   &:hover,
   &:focus {
     text-decoration: underline;
