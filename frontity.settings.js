@@ -3,8 +3,8 @@ const settings = {
   state: {
     frontity: {
       url: "https://ways4eu.wordpress.com/",
-      title: "Ways4eu WordPress.com Blog",
-      description: "WordPress Site in Frontity development",
+      title: "Blog to reflect n smile...",
+      description: "...where decency ends and fun begins 🤘😎",
     },
   },
   packages: [
