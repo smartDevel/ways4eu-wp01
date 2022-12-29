@@ -13,46 +13,56 @@ const settings = {
       state: {
           theme: {
               menu: [
-                  [
-                    "Home",
-                    "/"
-                  ],
-                  [
-                    "Hot-React",
-                    "/category/hot-react"
-                  ],
-                  [
-                    "Tips&Tricks",
-                    "/category/tips_tricks"
-                  ],
-                  [
-                    "ReadingList",
-                    "/category/readinglist"
-                  ],
-                  [
-                    "Education",
-                    "/category/education"
-                  ], 
-                  [
-                    "Javascript",
-                    "/tag/javascript"
-                  ],                                    
-                  [
-                    "Wikipedia",
-                    "/category/wikipedia"
-                  ],
-                  [
-                    "NASA",
-                    "/category/nasa"
-                  ],            
-                  [
-                    "Art",
-                    "/tag/art"
-                  ],                                                            
-                  [
-                    "Music",
-                    "/tag/music"
-                  ]            
+                  {
+                    name: 'Home',
+                    href: '/',
+                  },
+                  {
+                    name: 'Hot-React',
+                    href: '/category/hot-react',
+                  },
+                  {
+                    name: 'Tips&Tricks',
+                    href: '/category/tips_tricks',
+                  },
+                  {
+                    name: 'ReadingList',
+                    href: '/category/readinglist',
+                  },
+                  {
+                    name: 'Education',
+                    href: '/category/education',
+                  }, 
+                  {
+                    name: 'Javascript',
+                    href: '/tag/javascript',
+                    submenu: [
+                      {
+                        name: 'Hot-React',
+                        href: '/category/hot-react'
+                      },
+                      {
+                        name: 'Education',
+                        href: '/category/education'
+                      }
+                    ]
+                  },                                    
+                  {
+                    name: 'Wikipedia',
+                    href: '/category/wikipedia',
+                  },
+                  {
+                    name: 'NASA',
+                    href: '/category/nasa',
+                  },            
+                  {
+                    name: 'Art',
+                    href: '/tag/art',
+                  },                                                            
+                  {
+                    name: 'Music',
+                    href: '/tag/music',
+                  }            
                 ],
               colors: {
                 //primary: "#E6324B",
