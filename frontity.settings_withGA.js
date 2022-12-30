@@ -93,7 +93,16 @@ const settings = {
             "https://public-api.wordpress.com/wp/v2/sites/ways4eu.wordpress.com",
         },
       },
-    },       
+    },
+        {
+          name: "@frontity/google-analytics",
+          state: {
+            googleAnalytics: {
+              trackingId: "UA-138142992-3",
+            },
+          },
+        },
+
     "@frontity/tiny-router",
     "@frontity/html2react",
   ],
