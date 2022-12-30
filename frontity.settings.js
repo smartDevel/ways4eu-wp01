@@ -94,6 +94,15 @@ const settings = {
         },
       },
     },
+        {
+          name: "@frontity/google-analytics",
+          state: {
+            googleAnalytics: {
+              trackingId: "UA-138142992-3",
+            },
+          },
+        },
+
     "@frontity/tiny-router",
     "@frontity/html2react",
   ],
