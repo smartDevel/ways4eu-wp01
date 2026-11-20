@@ -10,6 +10,9 @@ import PageError from "./page-error";
 //SY20220117_5 Begin change --- Integrating Google-Analytics
 import ReactGA from "react-ga";
 //SY20220117_5 End change --- Integrating Google-Analytics
+// Vercel Web Analytics
+// Webpack 4 cannot resolve modern package "exports" subpaths.
+import { Analytics } from "@vercel/analytics/dist/react/index.js";
 
 /**
  * Theme is the root React component of our theme. The one we will export
@@ -79,6 +82,9 @@ const Theme = ({ state }) => {
           <PageError when={data.isError} />
         </Switch>
       </Main>
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </>
   );
 };
