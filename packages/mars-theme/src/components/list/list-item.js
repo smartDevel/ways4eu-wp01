@@ -14,6 +14,7 @@ import FeaturedMedia from "../featured-media";
 const Item = ({ state, item }) => {
   const author = state.source.author[item.author];
   const date = new Date(item.date);
+  const firstContentImage = item.content.rendered.match(/<img\b[^>]*>/i)?.[0];
   let rndExcerpt = false; //render ExcerptView nur wenn excerpt vorhanden und schalter auf standardview
   if (state.theme.viewmode === "standardView") {
     if (item.excerpt) {
@@ -47,7 +48,13 @@ const Item = ({ state, item }) => {
        * list of featured posts, we render the media.
        */}
       {state.theme.featured.showOnList && (
-        <FeaturedMedia id={item.featured_media} />
+        item.featured_media ? (
+          <FeaturedMedia id={item.featured_media} />
+        ) : firstContentImage ? (
+          <Link link={item.link}>
+            <PreviewMedia dangerouslySetInnerHTML={{ __html: firstContentImage }} />
+          </Link>
+        ) : null
       )}
 
       {/* If the post has an excerpt (short summary text), we render it */}
@@ -92,6 +99,17 @@ const PublishDate = styled.span`
 const Excerpt = styled.div`
   line-height: 1.6em;
   color: rgba(12, 17, 43, 0.8);
+`;
+
+const PreviewMedia = styled.div`
+  margin: 16px 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
 `;
 
 const Content = styled.div`
