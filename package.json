@@ -8,12 +8,12 @@
   ],
   "scripts": {
     "dev": "frontity dev",
-    "build": "frontity build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider frontity build",
     "serve": "frontity serve"
   },
   "prettier": {},
   "engines": {
-    "node": "16.x"
+    "node": "22.x"
   },
   "dependencies": {
     "@frontity/core": "^1.6.0",
