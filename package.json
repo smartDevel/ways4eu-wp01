@@ -1,38 +1,24 @@
 {
   "name": "ways4euwp-01",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Frontity project",
-  "keywords": [
-    "frontity"
-  ],
+  "description": "Next.js view of ways4eu.wordpress.com",
   "scripts": {
-    "dev": "frontity dev",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider frontity build",
-    "serve": "frontity serve"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
   },
-  "prettier": {},
   "engines": {
     "node": "22.x"
   },
   "dependencies": {
-    "@frontity/core": "^1.16.0",
-    "@frontity/html2react": "^1.7.0",
-    "@frontity/mars-theme": "./packages/mars-theme",
-    "@frontity/tiny-router": "^1.4.4",
-    "@frontity/wp-source": "^1.11.7",
-    "babel-plugin-macros": "^3.1.0",
-    "disqus-react": "^1.1.7",
-    "frontity": "^1.17.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-ga": "^3.3.1"
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
-  "overrides": {
-    "@loadable/component": "5.14.1",
-    "@loadable/server": "5.14.2",
-    "is-generator-function": "1.1.0",
-    "tar": "^7.5.23",
-    "typescript": "4.9.5"
+  "devDependencies": {
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.6"
   }
 }
