@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import DisqusComments from "@/components/DisqusComments";
 import ListView, { PostMeta } from "@/components/ListView";
 import { site } from "@/lib/config";
-import { getAuthor, getPage, getPost, getPosts, getTerm, internalPath } from "@/lib/wp";
+import { getAuthor, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
 
 export async function generateMetadata({ params }) {
   const { path = [] } = await params;
@@ -52,7 +52,7 @@ export default async function CatchAllPage({ params }) {
   return (
     <section className="content-container">
       {archive.heading && <h3 className="archive-heading">{archive.heading}</h3>}
-      <ListView posts={archive.posts} />
+      <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} />
       <Pagination route={route} totalPages={archive.totalPages} />
     </section>
   );
@@ -60,8 +60,15 @@ export default async function CatchAllPage({ params }) {
 
 async function resolveArchive(route) {
   if (route.kind === "home") {
-    const result = await getPosts({ page: route.page });
-    return result && { posts: result.data, totalPages: result.totalPages };
+    const [result, featured] = await Promise.all([
+      getPosts({ page: route.page, sticky: false }),
+      route.page === 1 ? getStickyPosts() : Promise.resolve(null),
+    ]);
+    return result && {
+      posts: result.data,
+      featuredPosts: featured?.data || [],
+      totalPages: result.totalPages,
+    };
   }
 
   if (route.kind === "taxonomy") {
