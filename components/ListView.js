@@ -6,8 +6,10 @@ import { internalPath, postAuthor } from "@/lib/wp";
 
 export default function ListView({ posts, featuredPosts = [] }) {
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
+  const [featuredOpen, setFeaturedOpen] = useState(false);
   const displayedPosts = [...featuredPosts, ...posts];
-  const allExpanded = displayedPosts.length > 0 && displayedPosts.every((post) => expandedPosts.has(post.id));
+  const allPostsExpanded = displayedPosts.length > 0 && displayedPosts.every((post) => expandedPosts.has(post.id));
+  const allExpanded = allPostsExpanded && (featuredPosts.length === 0 || featuredOpen);
 
   function togglePost(postId) {
     setExpandedPosts((current) => {
@@ -19,7 +21,13 @@ export default function ListView({ posts, featuredPosts = [] }) {
   }
 
   function toggleAllPosts() {
-    setExpandedPosts(allExpanded ? new Set() : new Set(displayedPosts.map((post) => post.id)));
+    if (allExpanded) {
+      setExpandedPosts(new Set());
+      setFeaturedOpen(false);
+    } else {
+      setExpandedPosts(new Set(displayedPosts.map((post) => post.id)));
+      if (featuredPosts.length > 0) setFeaturedOpen(true);
+    }
   }
 
   function renderPost(post, featured = false) {
@@ -66,8 +74,21 @@ export default function ListView({ posts, featuredPosts = [] }) {
       </div>
       {featuredPosts.length > 0 && (
         <section className="featured-posts" aria-labelledby="featured-heading">
-          <h2 id="featured-heading" className="post-section-heading">Featured</h2>
-          {featuredPosts.map((post) => renderPost(post, true))}
+          <h2 id="featured-heading" className="post-section-heading">
+            <button
+              type="button"
+              className="featured-section-toggle"
+              aria-expanded={featuredOpen}
+              aria-controls="featured-posts-content"
+              onClick={() => setFeaturedOpen((current) => !current)}
+            >
+              <span>Featured</span>
+              <span className="featured-toggle-icon" aria-hidden="true">⌄</span>
+            </button>
+          </h2>
+          <div id="featured-posts-content" hidden={!featuredOpen}>
+            {featuredPosts.map((post) => renderPost(post, true))}
+          </div>
         </section>
       )}
       {featuredPosts.length > 0 && <h2 className="post-section-heading latest-posts-heading">Latest posts</h2>}
