@@ -37,6 +37,14 @@ main {
 }
 .content-container, .error-page { width: 848px; max-width: 100%; margin: 0; padding: 24px; }
 .archive-heading { color: rgba(12, 17, 43, 0.9); font-weight: 300; text-transform: capitalize; }
+.post-list-controls { display: flex; justify-content: flex-end; padding: 16px 0 4px; }
+.all-posts-toggle {
+  padding: 8px 12px; border: 1px solid rgba(31, 56, 197, 0.45); border-radius: 4px;
+  color: rgb(31, 56, 197); background: rgba(255, 255, 255, 0.55);
+  font-weight: 600; cursor: pointer;
+}
+.all-posts-toggle:hover { color: #fff; background: rgb(31, 56, 197); }
+.all-posts-toggle:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 3px; }
 .post-list-item h1, .single-post h1 { color: rgb(12, 17, 43); }
 .post-list-item h1 { margin: 0; padding: 24px 0 8px; font-size: 2rem; }
 .post-list-item { padding-bottom: 16px; border-bottom: 1px solid rgba(12, 17, 43, 0.12); }

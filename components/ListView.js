@@ -6,6 +6,7 @@ import { internalPath, postAuthor } from "@/lib/wp";
 
 export default function ListView({ posts }) {
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
+  const allExpanded = posts.length > 0 && posts.every((post) => expandedPosts.has(post.id));
 
   function togglePost(postId) {
     setExpandedPosts((current) => {
@@ -16,8 +17,23 @@ export default function ListView({ posts }) {
     });
   }
 
+  function toggleAllPosts() {
+    setExpandedPosts(allExpanded ? new Set() : new Set(posts.map((post) => post.id)));
+  }
+
   return (
     <>
+      <div className="post-list-controls">
+        <button
+          type="button"
+          className="all-posts-toggle"
+          aria-expanded={allExpanded}
+          aria-controls={posts.map((post) => `post-content-${post.id}`).join(" ")}
+          onClick={toggleAllPosts}
+        >
+          {allExpanded ? "Collapse all posts" : "Expand all posts"}
+        </button>
+      </div>
       {posts.map((post) => {
         const author = postAuthor(post);
         const isExpanded = expandedPosts.has(post.id);
