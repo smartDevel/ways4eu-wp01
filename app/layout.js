@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import Analytics from "@/components/Analytics";
 import Header from "@/components/Header";
 import { site } from "@/lib/config";
+import { getCategories } from "@/lib/wp";
 
 export const metadata = {
   metadataBase: new URL(site.url),
@@ -15,11 +16,13 @@ export const metadata = {
   keywords: ["javascript", "react", "music", "software", "science"],
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const categories = await getCategories();
+
   return (
     <html lang="en">
       <body>
-        <Header />
+        <Header categories={categories} />
         <main>{children}</main>
         <Suspense fallback={null}>
           <Analytics />

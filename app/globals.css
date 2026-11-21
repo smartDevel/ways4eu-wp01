@@ -10,7 +10,7 @@ body[data-theme="dark"] { background-color: #a1acaf; color: #e0f8f7; }
 a, a:visited { color: inherit; text-decoration: none; }
 button { font: inherit; }
 .site-header { display: flex; align-items: center; flex-direction: column; background-color: #1f38c5; }
-.header-inner, .desktop-nav { width: 848px; max-width: 100%; }
+.header-inner, .desktop-nav, .desktop-browse-panel { width: 848px; max-width: 100%; }
 .header-inner { position: relative; padding: 24px; color: #fff; }
 .site-title h2 { margin: 0 0 16px; }
 .header-inner h4 { margin: 0; color: rgba(255, 255, 255, 0.7); }
@@ -18,19 +18,33 @@ button { font: inherit; }
 .button-row button { padding: 10px; border: 0; background: #fff; cursor: pointer; }
 .button-row button.selected { background: #ccc; }
 .header-inner .button-row { margin-top: 16px; }
-.desktop-nav { display: flex; padding: 0 24px; overflow-x: auto; }
-.desktop-nav a { flex-shrink: 0; margin: 0 16px; color: #fff; font-size: 0.9em; line-height: 2em; border-bottom: 2px solid transparent; }
-.desktop-nav a:first-child { margin-left: 0; }
+.desktop-nav { display: flex; align-items: center; gap: 28px; padding: 0 24px 12px; }
+.desktop-nav a, .browse-toggle { color: #fff; font-size: 0.9em; line-height: 2em; border: 0; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; }
 .desktop-nav a[aria-current="page"] { border-bottom-color: #fff; }
+.browse-toggle[aria-expanded="true"] { border-bottom-color: #fff; }
+.browse-toggle span { display: inline-block; transition: transform 160ms ease; }
+.browse-toggle[aria-expanded="true"] span { transform: rotate(180deg); }
+.browse-panel { padding: 18px 24px 24px; color: #fff; border-top: 1px solid rgba(255, 255, 255, 0.2); }
+.browse-filters { display: grid; grid-template-columns: 1.35fr 1fr 1.35fr; gap: 18px; align-items: start; }
+.browse-filters label { display: block; margin-bottom: 6px; color: rgba(255, 255, 255, 0.85); font-size: 0.82rem; font-weight: 600; }
+.browse-filters input, .browse-filters select, .browse-filters button { min-height: 42px; border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 5px; }
+.browse-filters input, .browse-filters select { width: 100%; padding: 8px 10px; color: #17213f; background: #fff; }
+.search-control { display: flex; gap: 6px; }
+.search-control input { min-width: 0; }
+.search-control button { flex: 0 0 auto; padding: 8px 12px; color: #1f38c5; background: #fff; font-weight: 700; cursor: pointer; }
+.search-control button:hover { background: #e0f8f7; }
+.browse-filters input:focus-visible, .browse-filters select:focus-visible, .browse-filters button:focus-visible { outline: 3px solid #ffeb3b; outline-offset: 2px; }
+.filter-message { display: block; min-height: 1.2em; margin-top: 4px; color: #ffeb3b; font-size: 0.75rem; }
 .menu-toggle {
   display: none; position: absolute; right: 24px; top: 24px; z-index: 5;
   width: 40px; height: 40px; border: 0; color: white; background: transparent;
   font-size: 28px; cursor: pointer;
 }
 .mobile-menu { position: fixed; z-index: 4; inset: 0; padding-top: 72px; background: #1f38c5; overflow: auto; }
-.mobile-menu nav { display: flex; flex-direction: column; }
+.mobile-menu nav { display: flex; flex-direction: column; width: 100%; max-width: 520px; margin: auto; padding: 0 24px 36px; }
 .mobile-menu a { width: 100%; padding: 1.2rem 0; color: white; font-size: 20px; text-align: center; }
 .mobile-menu a[aria-current="page"] { color: yellow; font-weight: bold; }
+.mobile-menu .browse-filters { display: flex; flex-direction: column; gap: 18px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.25); }
 main {
   display: flex; justify-content: center;
   background-image: linear-gradient(180deg, rgba(66, 174, 228, 0.1), rgba(66, 174, 228, 0));
@@ -108,4 +122,8 @@ main {
 @media (max-width: 560px) {
   .desktop-nav { display: none; }
   .menu-toggle { display: flex; align-items: center; justify-content: center; }
+}
+@media (min-width: 561px) and (max-width: 760px) {
+  .browse-filters { grid-template-columns: 1fr 1fr; }
+  .tag-filter { grid-column: 1 / -1; }
 }
