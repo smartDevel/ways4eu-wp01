@@ -44,11 +44,6 @@ export default function ListView({ posts }) {
               <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
             </Link>
             <PostMeta post={post} author={author} />
-            {isExpanded ? (
-              <div id={contentId} className="wp-content" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
-            ) : (
-              <div id={contentId} className="excerpt" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }} />
-            )}
             <button
               type="button"
               className="post-toggle"
@@ -59,6 +54,11 @@ export default function ListView({ posts }) {
               <span>{isExpanded ? "Show excerpt" : "Read full post"}</span>
               <span className="post-toggle-icon" aria-hidden="true">⌄</span>
             </button>
+            {isExpanded ? (
+              <div id={contentId} className="wp-content" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+            ) : (
+              <div id={contentId} className="excerpt" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }} />
+            )}
           </article>
         );
       })}
