@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import DisqusComments from "@/components/DisqusComments";
 import ListView, { PostMeta } from "@/components/ListView";
 import { site } from "@/lib/config";
-import { getAuthor, getPage, getPost, getPosts, getTerm, internalPath } from "@/lib/wp";
+import { getAuthor, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { path = [] } = await params;
-  const route = classify(path);
+  const query = ((await searchParams)?.q || "").trim();
+  const route = classify(path, query);
 
   if (route.kind === "post") {
     const post = await getPost(route.slug);
@@ -28,12 +29,17 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  if (route.kind === "search" && route.query) {
+    return { title: `Search: ${route.query}` };
+  }
+
   return { title: { absolute: site.title } };
 }
 
-export default async function CatchAllPage({ params }) {
+export default async function CatchAllPage({ params, searchParams }) {
   const { path = [] } = await params;
-  const route = classify(path);
+  const query = ((await searchParams)?.q || "").trim();
+  const route = classify(path, query);
 
   if (route.kind === "post") {
     const post = await getPost(route.slug);
@@ -52,7 +58,7 @@ export default async function CatchAllPage({ params }) {
   return (
     <section className="content-container">
       {archive.heading && <h3 className="archive-heading">{archive.heading}</h3>}
-      <ListView posts={archive.posts} />
+      <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} />
       <Pagination route={route} totalPages={archive.totalPages} />
     </section>
   );
@@ -60,8 +66,15 @@ export default async function CatchAllPage({ params }) {
 
 async function resolveArchive(route) {
   if (route.kind === "home") {
-    const result = await getPosts({ page: route.page });
-    return result && { posts: result.data, totalPages: result.totalPages };
+    const [result, featured] = await Promise.all([
+      getPosts({ page: route.page, sticky: false }),
+      route.page === 1 ? getStickyPosts() : Promise.resolve(null),
+    ]);
+    return result && {
+      posts: result.data,
+      featuredPosts: featured?.data || [],
+      totalPages: result.totalPages,
+    };
   }
 
   if (route.kind === "taxonomy") {
@@ -83,6 +96,18 @@ async function resolveArchive(route) {
       posts: result.data,
       totalPages: result.totalPages,
       heading: <>Author: <b>{author.name}</b></>,
+    };
+  }
+
+  if (route.kind === "search") {
+    if (!route.query) {
+      return { posts: [], totalPages: 1, heading: <>Search posts</> };
+    }
+    const result = await getPosts({ page: route.page, search: route.query });
+    return result && {
+      posts: result.data,
+      totalPages: result.totalPages,
+      heading: <>Search results for: <b>{route.query}</b></>,
     };
   }
 
@@ -122,19 +147,24 @@ function Pagination({ route, totalPages }) {
 }
 
 function pageHref(route, page) {
+  if (route.kind === "search") {
+    const base = page === 1 ? "/search/" : `/search/page/${page}/`;
+    return `${base}?q=${encodeURIComponent(route.query)}`;
+  }
   const base = route.kind === "home" ? "" : route.kind === "taxonomy"
     ? `/${route.taxonomy}/${route.slug}`
     : `/author/${route.slug}`;
   return page === 1 ? `${base || "/"}/`.replace("//", "/") : `${base}/page/${page}/`;
 }
 
-function classify(path) {
+function classify(path, query = "") {
   const parts = path.filter(Boolean);
   const pageIndex = parts.indexOf("page");
   const page = pageIndex >= 0 && /^\d+$/.test(parts[pageIndex + 1] || "") ? Number(parts[pageIndex + 1]) : 1;
   const base = pageIndex >= 0 ? parts.slice(0, pageIndex) : parts;
 
   if (base.length === 0) return { kind: "home", page };
+  if (base.length === 1 && base[0] === "search") return { kind: "search", query, page };
   if (base.length === 2 && (base[0] === "tag" || base[0] === "category")) {
     return { kind: "taxonomy", taxonomy: base[0], slug: base[1], page };
   }
