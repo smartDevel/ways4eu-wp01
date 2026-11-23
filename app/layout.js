@@ -2,6 +2,7 @@ import Script from "next/script";
 import { Suspense } from "react";
 import "@/app/globals.css";
 import Analytics from "@/components/Analytics";
+import FavoritesProvider from "@/components/FavoritesProvider";
 import Header from "@/components/Header";
 import { site } from "@/lib/config";
 import { getCategories } from "@/lib/wp";
@@ -22,8 +23,10 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Header categories={categories} />
-        <main>{children}</main>
+        <FavoritesProvider>
+          <Header categories={categories} />
+          <main>{children}</main>
+        </FavoritesProvider>
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>

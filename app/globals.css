@@ -32,6 +32,12 @@ button { font: inherit; }
 .desktop-nav > a, .nav-toggle { padding: 2px 0; color: rgba(255, 255, 255, 0.82); font-size: 0.87rem; font-weight: 650; line-height: 2em; border: 0; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; }
 .desktop-nav > a:hover, .nav-toggle:hover { color: #fff; }
 .desktop-nav a[aria-current="page"] { border-bottom-color: #fff; }
+.favorites-nav-link { display: inline-flex; align-items: center; gap: 7px; }
+.favorites-count {
+  display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px;
+  border-radius: 999px; color: #172ca9; background: #9ee9e5;
+  font-size: 0.72rem; font-weight: 800; line-height: 1;
+}
 .nav-toggle[aria-expanded="true"] { color: #fff; border-bottom-color: #9ee9e5; }
 .chevron { display: inline-block; margin-left: 4px; transition: transform 160ms ease; }
 .nav-toggle[aria-expanded="true"] .chevron, .mobile-links-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
@@ -114,6 +120,19 @@ main {
 .post-list-item:last-child { border-bottom: 0; }
 .single-post h1 { margin: 24px 0 8px; }
 .post-meta { color: rgba(12, 17, 43, 0.9); font-size: 0.9em; }
+.favorite-button {
+  display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; padding: 7px 11px;
+  border: 1px solid rgba(31, 56, 197, 0.4); border-radius: 999px;
+  color: rgb(31, 56, 197); background: rgba(255, 255, 255, 0.62);
+  font-size: 0.82rem; font-weight: 700; line-height: 1; cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+.favorite-button:hover { color: #fff; background: rgb(31, 56, 197); transform: translateY(-1px); }
+.favorite-button.is-favorite { color: #17213f; border-color: #e5ad00; background: #ffe48c; }
+.favorite-button.is-favorite:hover { background: #ffd95a; }
+.favorite-button:disabled { opacity: 0.55; cursor: wait; }
+.favorite-button:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 3px; }
+.favorite-star { font-size: 1.2em; line-height: 0.8; }
 .excerpt, .wp-content { color: rgba(12, 17, 43, 0.8); word-break: break-word; }
 .excerpt, .wp-content p { line-height: 1.6em; }
 .post-toggle {
@@ -136,6 +155,26 @@ main {
 .wp-content a { color: rgb(31, 56, 197); text-decoration: underline; }
 .pagination a { display: inline-block; margin-top: 16px; font-style: italic; }
 .comments { margin: 24px 0 8px; }
+.favorites-intro { margin: 18px 0 30px; padding: 26px 28px; border-radius: 12px; color: #fff; background: linear-gradient(135deg, #172ca9, #2746d4); box-shadow: 0 10px 28px rgba(18, 35, 125, 0.16); }
+.favorites-intro h1 { margin: 4px 0 8px; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -0.04em; }
+.favorites-intro p { max-width: 650px; margin: 0; color: rgba(255, 255, 255, 0.8); line-height: 1.55; }
+.favorites-kicker { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+.favorites-list { display: grid; gap: 16px; }
+.favorite-list-item { padding: 22px; border: 1px solid rgba(12, 17, 43, 0.12); border-radius: 10px; background: rgba(255, 255, 255, 0.5); box-shadow: 0 6px 18px rgba(12, 17, 43, 0.06); }
+.favorite-list-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.favorite-list-heading h2 { margin: 0; color: rgb(12, 17, 43); font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.2; }
+.favorite-list-heading .favorite-button { flex: 0 0 auto; margin-top: 0; }
+.favorite-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 10px 0 0; color: rgba(12, 17, 43, 0.68); font-size: 0.82rem; }
+.favorite-meta span { margin-left: auto; }
+.favorite-list-item .excerpt { display: -webkit-box; margin: 16px 0 10px; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.55; }
+.favorite-open-link { display: inline-block; margin-top: 4px; color: rgb(31, 56, 197); font-size: 0.9rem; font-weight: 700; }
+.favorite-open-link:hover { text-decoration: underline; }
+.favorites-empty { padding: 52px 24px; border: 1px dashed rgba(31, 56, 197, 0.35); border-radius: 12px; color: rgba(12, 17, 43, 0.78); background: rgba(255, 255, 255, 0.4); text-align: center; }
+.favorites-empty-star { color: rgb(31, 56, 197); font-size: 3.2rem; line-height: 1; }
+.favorites-empty h2 { margin: 12px 0 8px; color: rgb(12, 17, 43); }
+.favorites-empty p { margin: 0 0 20px; }
+.favorites-empty a { display: inline-block; padding: 10px 15px; border-radius: 6px; color: #fff; background: rgb(31, 56, 197); font-weight: 700; }
+.favorites-status { min-height: 180px; padding-top: 40px; color: rgba(12, 17, 43, 0.75); text-align: center; }
 .error-page { text-align: center; }
 .error-page h1 { margin: 24px 0 8px; color: rgb(12, 17, 43); font-size: 4em; }
 .error-page p { margin: 24px 0; color: rgba(12, 17, 43, 0.8); line-height: 1.6em; }
@@ -152,6 +191,13 @@ main {
   .site-title { font-size: clamp(1.55rem, 7.3vw, 2rem); }
   .site-description { margin-top: 7px; font-size: 0.78rem; line-height: 1.35; }
   .menu-toggle { display: flex; align-items: center; justify-content: center; }
+  .mobile-menu .favorites-nav-link { display: flex; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.18); }
+  .favorites-page { padding: 16px; }
+  .favorites-intro { margin-top: 8px; padding: 22px 20px; }
+  .favorite-list-item { padding: 18px; }
+  .favorite-list-heading { display: block; }
+  .favorite-list-heading .favorite-button { margin-top: 12px; }
+  .favorite-meta span { width: 100%; margin: 2px 0 0; }
 }
 @media (min-width: 701px) and (max-width: 800px) {
   .browse-filters { grid-template-columns: 1fr 1fr; }

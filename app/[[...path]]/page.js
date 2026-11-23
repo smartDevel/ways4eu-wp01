@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import DisqusComments from "@/components/DisqusComments";
+import FavoriteButton from "@/components/FavoriteButton";
 import ListView, { PostMeta } from "@/components/ListView";
 import { site } from "@/lib/config";
 import { getAuthor, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
@@ -115,10 +116,21 @@ async function resolveArchive(route) {
 }
 
 function SinglePost({ post, path }) {
+  const author = post._embedded?.author?.[0];
+  const favoritePost = {
+    id: post.id,
+    title: post.title,
+    excerpt: post.excerpt,
+    link: post.link,
+    date: post.date,
+    author: author ? { name: author.name, link: author.link } : null,
+  };
+
   return (
     <article className="content-container single-post">
       <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
       <PostMeta post={post} />
+      <FavoriteButton post={favoritePost} />
       <div className="wp-content" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
       <DisqusComments identifier={post.id} title={stripHtml(post.title.rendered)} path={path} />
     </article>
