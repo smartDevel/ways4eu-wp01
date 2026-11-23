@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import DisqusComments from "@/components/DisqusComments";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
 import ListView, { PostMeta } from "@/components/ListView";
 import ShareButtons from "@/components/ShareButtons";
+import WordPressComments from "@/components/WordPressComments";
 import { site } from "@/lib/config";
-import { getAuthor, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
+import { getAuthor, getComments, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
 
 export async function generateMetadata({ params, searchParams }) {
   const { path = [] } = await params;
@@ -117,8 +117,9 @@ async function resolveArchive(route) {
   return null;
 }
 
-function SinglePost({ post, path }) {
+async function SinglePost({ post, path }) {
   const author = post._embedded?.author?.[0];
+  const comments = await getComments(post.id);
   const favoritePost = {
     id: post.id,
     title: post.title,
@@ -142,7 +143,11 @@ function SinglePost({ post, path }) {
         text={stripHtml(post.excerpt.rendered)}
         url={new URL(path, site.url).href}
       />
-      <DisqusComments identifier={post.id} title={stripHtml(post.title.rendered)} path={path} />
+      <WordPressComments
+        comments={comments}
+        commentStatus={post.comment_status}
+        postUrl={post.link}
+      />
     </article>
   );
 }
