@@ -201,6 +201,22 @@ main {
 .favorites-no-results button { padding: 9px 13px; border: 0; border-radius: 6px; color: #fff; background: rgb(31, 56, 197); font-weight: 700; cursor: pointer; }
 .favorites-no-results button:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 3px; }
 .favorites-status { min-height: 180px; padding-top: 40px; color: rgba(12, 17, 43, 0.75); text-align: center; }
+.share-section { margin: 34px 0 12px; padding: 24px; border: 1px solid rgba(12, 17, 43, 0.12); border-radius: 12px; background: rgba(255, 255, 255, 0.5); box-shadow: 0 6px 18px rgba(12, 17, 43, 0.06); }
+.share-heading-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
+.share-kicker { margin: 0 0 4px; color: rgb(31, 56, 197); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.share-section h2 { margin: 0; color: rgb(12, 17, 43); font-size: 1.3rem; }
+.share-privacy { max-width: 390px; margin: 0; color: rgba(12, 17, 43, 0.65); font-size: 0.78rem; line-height: 1.45; }
+.share-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.share-button {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 7px 11px;
+  border: 1px solid rgba(31, 56, 197, 0.22); border-radius: 999px;
+  color: #17213f; background: #fff; font-size: 0.78rem; font-weight: 700; line-height: 1; cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+.share-button:hover { color: #fff; border-color: rgb(31, 56, 197); background: rgb(31, 56, 197); transform: translateY(-1px); }
+.share-button:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 2px; }
+.share-icon { display: inline-grid; place-items: center; min-width: 18px; height: 18px; font-size: 0.92rem; font-weight: 850; line-height: 1; }
+.share-message { min-height: 1.2em; margin: 10px 0 0; color: rgba(12, 17, 43, 0.68); font-size: 0.76rem; }
 .error-page { text-align: center; }
 .error-page h1 { margin: 24px 0 8px; color: rgb(12, 17, 43); font-size: 4em; }
 .error-page p { margin: 24px 0; color: rgba(12, 17, 43, 0.8); line-height: 1.6em; }
@@ -228,10 +244,22 @@ main {
   .favorites-result-count { margin: 0; }
   .favorite-rating { gap: 6px; }
   .favorite-rating-value { width: 100%; }
+  .share-section { padding: 20px 18px; }
+  .share-heading-row { display: block; }
+  .share-privacy { margin-top: 10px; }
+  .share-button { flex: 1 1 108px; justify-content: center; }
 }
 @media (min-width: 701px) and (max-width: 800px) {
   .browse-filters { grid-template-columns: 1fr 1fr; }
   .tag-filter { grid-column: 1 / -1; }
   .header-inner { gap: 16px; }
   .header-social { display: none; }
+}
+@media print {
+  body, body[data-theme="dark"], main { color: #111; background: #fff; }
+  .site-header, .favorite-actions, .favorite-button, .favorite-rating, .favorites-controls, .share-section, .comments { display: none !important; }
+  .content-container { width: 100%; padding: 0; }
+  .favorites-intro { color: #111; background: #fff; box-shadow: none; border: 1px solid #bbb; }
+  .favorites-intro p { color: #333; }
+  .favorite-list-item { break-inside: avoid; background: #fff; box-shadow: none; }
 }

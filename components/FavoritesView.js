@@ -4,6 +4,7 @@ import Link from "next/link";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
 import { useFavorites } from "@/components/FavoritesProvider";
+import ShareButtons from "@/components/ShareButtons";
 import { useMemo, useState } from "react";
 
 export default function FavoritesView() {
@@ -90,6 +91,7 @@ export default function FavoritesView() {
         </article>
       ))}
       </div>}
+      <ShareButtons title="My CurioSphere favorites" url="/favorites/" favorites={favorites} />
     </>
   );
 }

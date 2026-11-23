@@ -4,6 +4,7 @@ import DisqusComments from "@/components/DisqusComments";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
 import ListView, { PostMeta } from "@/components/ListView";
+import ShareButtons from "@/components/ShareButtons";
 import { site } from "@/lib/config";
 import { getAuthor, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
 
@@ -136,6 +137,11 @@ function SinglePost({ post, path }) {
         <FavoriteRating post={favoritePost} />
       </div>
       <div className="wp-content" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+      <ShareButtons
+        title={stripHtml(post.title.rendered)}
+        text={stripHtml(post.excerpt.rendered)}
+        url={new URL(path, site.url).href}
+      />
       <DisqusComments identifier={post.id} title={stripHtml(post.title.rendered)} path={path} />
     </article>
   );
