@@ -6,6 +6,7 @@ import { site } from "@/lib/config";
 const SERVICES = [
   ["Facebook", "f"],
   ["Instagram", "◎"],
+  ["TikTok", "♪"],
   ["WhatsApp", "◉"],
   ["Email", "@"],
   ["Telegram", "➤"],
@@ -29,9 +30,10 @@ export default function ShareButtons({ title, text = "", url, favorites = [] }) 
       : `Open ${service} and paste the ${payload.kind.toLowerCase()} manually.`);
   }
 
-  function openInstagram() {
-    window.open("https://www.instagram.com/", "_blank", "noopener,noreferrer");
-    copyFor("Instagram");
+  function openCopyService(service) {
+    const destination = service === "TikTok" ? "https://www.tiktok.com/" : "https://www.instagram.com/";
+    window.open(destination, "_blank", "noopener,noreferrer");
+    copyFor(service);
   }
 
   function printPage() {
@@ -50,8 +52,8 @@ export default function ShareButtons({ title, text = "", url, favorites = [] }) 
       </div>
       <div className="share-buttons">
         {SERVICES.map(([service, icon]) => {
-          if (service === "Instagram") {
-            return <ShareButton key={service} service={service} icon={icon} onClick={openInstagram} />;
+          if (service === "Instagram" || service === "TikTok") {
+            return <ShareButton key={service} service={service} icon={icon} onClick={() => openCopyService(service)} />;
           }
           if (service === "Print") {
             return <ShareButton key={service} service={service} icon={icon} onClick={printPage} />;
