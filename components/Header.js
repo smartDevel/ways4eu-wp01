@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { useFavorites } from "@/components/FavoritesProvider";
 import { externalLinks, site, socialLinks } from "@/lib/config";
 
 export default function Header({ categories = [] }) {
   const pathname = usePathname();
+  const { count, ready } = useFavorites();
   const [dark, setDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
@@ -57,6 +59,7 @@ export default function Header({ categories = [] }) {
 
       <nav className="desktop-nav" aria-label="Primary navigation">
         <Link href="/" aria-current={normalize(pathname) === "/" ? "page" : undefined}>Home</Link>
+        <FavoritesLink pathname={pathname} count={count} ready={ready} />
         <button
           type="button"
           className="nav-toggle"
@@ -90,6 +93,7 @@ export default function Header({ categories = [] }) {
         <div id="mobile-navigation" className="mobile-menu">
           <nav aria-label="Mobile navigation">
             <Link href="/" onClick={closeMobile} aria-current={normalize(pathname) === "/" ? "page" : undefined}>Home</Link>
+            <FavoritesLink pathname={pathname} count={count} ready={ready} onClick={closeMobile} />
             <button type="button" className="mobile-links-toggle" aria-expanded={linksOpen} aria-controls="mobile-links-menu" onClick={() => setLinksOpen((value) => !value)}>
               Links <Chevron />
             </button>
@@ -102,6 +106,22 @@ export default function Header({ categories = [] }) {
         </div>
       )}
     </header>
+  );
+}
+
+function FavoritesLink({ pathname, count, ready, onClick }) {
+  const label = ready ? `Favorites, ${count} saved ${count === 1 ? "post" : "posts"}` : "Favorites";
+  return (
+    <Link
+      href="/favorites/"
+      className="favorites-nav-link"
+      aria-current={normalize(pathname) === "/favorites/" ? "page" : undefined}
+      aria-label={label}
+      onClick={onClick}
+    >
+      <span>Favorites</span>
+      {ready && count > 0 && <span className="favorites-count" aria-hidden="true">{count}</span>}
+    </Link>
   );
 }
 

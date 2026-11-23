@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import FavoriteButton from "@/components/FavoriteButton";
+import FavoriteRating from "@/components/FavoriteRating";
 import { internalPath, postAuthor } from "@/lib/wp";
 
 export default function ListView({ posts, featuredPosts = [] }) {
@@ -40,6 +42,10 @@ export default function ListView({ posts, featuredPosts = [] }) {
           <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
         </Link>
         <PostMeta post={post} author={author} />
+        <div className="favorite-actions">
+          <FavoriteButton post={post} />
+          <FavoriteRating post={post} />
+        </div>
         <button
           type="button"
           className="post-toggle"
