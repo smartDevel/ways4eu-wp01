@@ -206,6 +206,7 @@ main {
 .favorites-controls select { display: block; width: 100%; min-height: 42px; margin-top: 6px; padding: 7px 10px; border: 1px solid rgba(31, 56, 197, 0.28); border-radius: 6px; color: #17213f; background: #fff; }
 .favorites-controls select:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 2px; }
 .favorites-result-count { margin: 0 0 10px; color: rgba(12, 17, 43, 0.64); font-size: 0.8rem; white-space: nowrap; }
+.favorites-expand-controls { padding-top: 0; padding-bottom: 12px; }
 .favorite-list-item { padding: 22px; border: 1px solid rgba(12, 17, 43, 0.12); border-radius: 10px; background: rgba(255, 255, 255, 0.5); box-shadow: 0 6px 18px rgba(12, 17, 43, 0.06); }
 .favorite-list-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .favorite-list-heading h2 { margin: 0; color: rgb(12, 17, 43); font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.2; }
@@ -215,6 +216,10 @@ main {
 .favorite-list-item .excerpt { display: -webkit-box; margin: 16px 0 10px; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.55; }
 .favorite-open-link { display: inline-block; margin-top: 4px; color: rgb(31, 56, 197); font-size: 0.9rem; font-weight: 700; }
 .favorite-open-link:hover { text-decoration: underline; }
+.favorite-content-status { margin: 16px 0 0; padding: 18px; border-radius: 8px; color: rgba(12, 17, 43, 0.72); background: rgba(224, 248, 247, 0.7); font-size: 0.86rem; text-align: center; }
+.favorite-content-status p { margin: 0 0 10px; }
+.favorite-content-status button { padding: 7px 10px; border: 0; border-radius: 5px; color: #fff; background: rgb(31, 56, 197); font-weight: 700; cursor: pointer; }
+.favorite-content-status a { color: rgb(31, 56, 197); font-weight: 700; text-decoration: underline; }
 .favorites-empty { padding: 52px 24px; border: 1px dashed rgba(31, 56, 197, 0.35); border-radius: 12px; color: rgba(12, 17, 43, 0.78); background: rgba(255, 255, 255, 0.4); text-align: center; }
 .favorites-empty-star { color: rgb(31, 56, 197); font-size: 3.2rem; line-height: 1; }
 .favorites-empty h2 { margin: 12px 0 8px; color: rgb(12, 17, 43); }
