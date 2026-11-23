@@ -26,13 +26,25 @@ export default function FavoritesProvider({ children }) {
     writeFavorites(next);
   }, []);
 
+  const setRating = useCallback((postId, value) => {
+    const id = Number(postId);
+    const rating = normalizeRating(value);
+    if (!Number.isFinite(id) || rating === 0) return;
+
+    const current = getFavoritesSnapshot();
+    if (!current.some((item) => item.id === id)) return;
+    writeFavorites(current.map((item) => item.id === id ? { ...item, rating } : item));
+  }, []);
+
   const value = useMemo(() => ({
     favorites,
     ready,
     count: favorites.length,
     isFavorite: (postId) => favorites.some((item) => item.id === Number(postId)),
+    getRating: (postId) => favorites.find((item) => item.id === Number(postId))?.rating || 0,
+    setRating,
     toggleFavorite,
-  }), [favorites, ready, toggleFavorite]);
+  }), [favorites, ready, setRating, toggleFavorite]);
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
 }
@@ -58,6 +70,7 @@ function normalizeFavorite(post) {
       name: author.name,
       path: localPostPath(author.path || author.link),
     } : null,
+    rating: normalizeRating(post?.rating),
   };
 }
 
@@ -106,11 +119,17 @@ function readFavorites(serialized = "[]") {
         path: item.path,
         date: typeof item.date === "string" ? item.date : "",
         author: item.author?.name ? item.author : null,
+        rating: normalizeRating(item.rating),
         savedAt: typeof item.savedAt === "string" ? item.savedAt : "",
       }));
   } catch {
     return [];
   }
+}
+
+function normalizeRating(value) {
+  const rating = Number(value);
+  return Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : 0;
 }
 
 function getFavoritesSnapshot() {

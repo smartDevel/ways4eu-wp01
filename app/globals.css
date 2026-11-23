@@ -133,6 +133,19 @@ main {
 .favorite-button:disabled { opacity: 0.55; cursor: wait; }
 .favorite-button:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 3px; }
 .favorite-star { font-size: 1.2em; line-height: 0.8; }
+.favorite-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; }
+.favorite-actions .favorite-button { margin-top: 0; }
+.favorite-rating { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 12px; color: rgba(12, 17, 43, 0.72); }
+.favorite-actions .favorite-rating { margin-top: 0; }
+.favorite-rating-label { font-size: 0.78rem; font-weight: 700; }
+.favorite-rating-stars { display: inline-flex; align-items: center; gap: 1px; }
+.favorite-rating-stars button {
+  display: grid; place-items: center; width: 27px; height: 27px; padding: 0; border: 0; border-radius: 4px;
+  color: rgba(12, 17, 43, 0.22); background: transparent; font-size: 1.15rem; line-height: 1; cursor: pointer;
+}
+.favorite-rating-stars button:hover, .favorite-rating-stars button.is-selected { color: #d79d00; background: rgba(255, 228, 140, 0.36); }
+.favorite-rating-stars button:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 1px; }
+.favorite-rating-value { min-width: 70px; font-size: 0.75rem; }
 .excerpt, .wp-content { color: rgba(12, 17, 43, 0.8); word-break: break-word; }
 .excerpt, .wp-content p { line-height: 1.6em; }
 .post-toggle {
@@ -160,6 +173,15 @@ main {
 .favorites-intro p { max-width: 650px; margin: 0; color: rgba(255, 255, 255, 0.8); line-height: 1.55; }
 .favorites-kicker { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
 .favorites-list { display: grid; gap: 16px; }
+.favorites-controls {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 14px 18px; align-items: end;
+  margin-bottom: 18px; padding: 16px 18px; border: 1px solid rgba(12, 17, 43, 0.12); border-radius: 10px;
+  background: rgba(255, 255, 255, 0.46);
+}
+.favorites-controls label { color: rgba(12, 17, 43, 0.72); font-size: 0.78rem; font-weight: 700; }
+.favorites-controls select { display: block; width: 100%; min-height: 42px; margin-top: 6px; padding: 7px 10px; border: 1px solid rgba(31, 56, 197, 0.28); border-radius: 6px; color: #17213f; background: #fff; }
+.favorites-controls select:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 2px; }
+.favorites-result-count { margin: 0 0 10px; color: rgba(12, 17, 43, 0.64); font-size: 0.8rem; white-space: nowrap; }
 .favorite-list-item { padding: 22px; border: 1px solid rgba(12, 17, 43, 0.12); border-radius: 10px; background: rgba(255, 255, 255, 0.5); box-shadow: 0 6px 18px rgba(12, 17, 43, 0.06); }
 .favorite-list-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .favorite-list-heading h2 { margin: 0; color: rgb(12, 17, 43); font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.2; }
@@ -174,6 +196,10 @@ main {
 .favorites-empty h2 { margin: 12px 0 8px; color: rgb(12, 17, 43); }
 .favorites-empty p { margin: 0 0 20px; }
 .favorites-empty a { display: inline-block; padding: 10px 15px; border-radius: 6px; color: #fff; background: rgb(31, 56, 197); font-weight: 700; }
+.favorites-no-results { padding: 38px 24px; border: 1px dashed rgba(31, 56, 197, 0.35); border-radius: 10px; color: rgba(12, 17, 43, 0.72); background: rgba(255, 255, 255, 0.4); text-align: center; }
+.favorites-no-results h2 { margin: 0 0 16px; color: rgb(12, 17, 43); font-size: 1.25rem; }
+.favorites-no-results button { padding: 9px 13px; border: 0; border-radius: 6px; color: #fff; background: rgb(31, 56, 197); font-weight: 700; cursor: pointer; }
+.favorites-no-results button:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 3px; }
 .favorites-status { min-height: 180px; padding-top: 40px; color: rgba(12, 17, 43, 0.75); text-align: center; }
 .error-page { text-align: center; }
 .error-page h1 { margin: 24px 0 8px; color: rgb(12, 17, 43); font-size: 4em; }
@@ -198,6 +224,10 @@ main {
   .favorite-list-heading { display: block; }
   .favorite-list-heading .favorite-button { margin-top: 12px; }
   .favorite-meta span { width: 100%; margin: 2px 0 0; }
+  .favorites-controls { grid-template-columns: 1fr; gap: 12px; }
+  .favorites-result-count { margin: 0; }
+  .favorite-rating { gap: 6px; }
+  .favorite-rating-value { width: 100%; }
 }
 @media (min-width: 701px) and (max-width: 800px) {
   .browse-filters { grid-template-columns: 1fr 1fr; }

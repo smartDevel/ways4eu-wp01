@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import DisqusComments from "@/components/DisqusComments";
 import FavoriteButton from "@/components/FavoriteButton";
+import FavoriteRating from "@/components/FavoriteRating";
 import ListView, { PostMeta } from "@/components/ListView";
 import { site } from "@/lib/config";
 import { getAuthor, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
@@ -130,7 +131,10 @@ function SinglePost({ post, path }) {
     <article className="content-container single-post">
       <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
       <PostMeta post={post} />
-      <FavoriteButton post={favoritePost} />
+      <div className="favorite-actions">
+        <FavoriteButton post={favoritePost} />
+        <FavoriteRating post={favoritePost} />
+      </div>
       <div className="wp-content" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
       <DisqusComments identifier={post.id} title={stripHtml(post.title.rendered)} path={path} />
     </article>
