@@ -15,7 +15,7 @@ export default function FavoritesView() {
     const filtered = favorites.filter((favorite) => {
       if (ratingFilter === "all") return true;
       if (ratingFilter === "unrated") return favorite.rating === 0;
-      return favorite.rating >= Number(ratingFilter);
+      return favorite.rating === Number(ratingFilter);
     });
 
     return [...filtered].sort((left, right) => {
@@ -58,10 +58,10 @@ export default function FavoritesView() {
           <select value={ratingFilter} onChange={(event) => setRatingFilter(event.target.value)}>
             <option value="all">All favorites</option>
             <option value="5">5 stars</option>
-            <option value="4">4 stars or more</option>
-            <option value="3">3 stars or more</option>
-            <option value="2">2 stars or more</option>
-            <option value="1">Rated</option>
+            <option value="4">4 stars</option>
+            <option value="3">3 stars</option>
+            <option value="2">2 stars</option>
+            <option value="1">1 star</option>
             <option value="unrated">Not rated</option>
           </select>
         </label>
