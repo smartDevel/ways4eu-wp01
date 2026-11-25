@@ -210,6 +210,7 @@ main {
 .all-posts-toggle:hover { color: #fff; background: rgb(31, 56, 197); }
 .all-posts-toggle:focus-visible { outline: 3px solid rgba(31, 56, 197, 0.45); outline-offset: 3px; }
 .post-list-item h1, .single-post h1 { color: rgb(12, 17, 43); }
+.post-list-item h1, .single-post h1, .favorite-list-heading h2 { overflow-wrap: anywhere; }
 .post-list-item h1 { margin: 0; padding: 24px 0 8px; font-size: 2rem; }
 .post-list-item { padding-bottom: 16px; border-bottom: 1px solid rgba(12, 17, 43, 0.12); }
 .post-list-item:last-child { border-bottom: 0; }
