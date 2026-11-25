@@ -64,8 +64,9 @@ export default async function CatchAllPage({ params, searchParams }) {
   return (
     <section className="content-container">
       {archive.heading && <h3 className="archive-heading">{archive.heading}</h3>}
+      <Pagination route={route} totalPages={archive.totalPages} position="top" />
       <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} postsPerPage={route.perPage} />
-      <Pagination route={route} totalPages={archive.totalPages} />
+      <Pagination route={route} totalPages={archive.totalPages} position="bottom" />
     </section>
   );
 }
@@ -164,16 +165,49 @@ function SinglePage({ page }) {
   );
 }
 
-function Pagination({ route, totalPages }) {
+function Pagination({ route, totalPages, position }) {
   if (totalPages <= 1) return null;
   const page = route.page || 1;
+  const pages = paginationItems(page, totalPages);
+
   return (
-    <nav className="pagination" aria-label="Pagination">
-      {page < totalPages && <Link href={pageHref(route, page + 1)}>← Older posts</Link>}
-      {page < totalPages && page > 1 && " - "}
-      {page > 1 && <Link href={pageHref(route, page - 1)}>Newer posts →</Link>}
+    <nav className={`pagination pagination-${position}`} aria-label={`${position === "top" ? "Top" : "Bottom"} pagination`}>
+      <span className="pagination-summary">Page {page} of {totalPages}</span>
+      <div className="pagination-links">
+        {page > 1 && (
+          <Link className="pagination-direction" href={pageHref(route, page - 1)} aria-label={`Previous page, page ${page - 1}`}>
+            ← Previous
+          </Link>
+        )}
+        {pages.map((item, index) => item === "ellipsis" ? (
+          <span key={`ellipsis-${index}`} className="pagination-ellipsis" aria-hidden="true">…</span>
+        ) : item === page ? (
+          <span key={item} className="pagination-page is-current" aria-current="page" aria-label={`Page ${item}, current page`}>
+            {item}
+          </span>
+        ) : (
+          <Link key={item} className="pagination-page" href={pageHref(route, item)} aria-label={`Go to page ${item}`}>
+            {item}
+          </Link>
+        ))}
+        {page < totalPages && (
+          <Link className="pagination-direction" href={pageHref(route, page + 1)} aria-label={`Next page, page ${page + 1}`}>
+            Next →
+          </Link>
+        )}
+      </div>
     </nav>
   );
+}
+
+function paginationItems(page, totalPages) {
+  const visiblePages = [...new Set([1, totalPages, page - 2, page - 1, page, page + 1, page + 2])]
+    .filter((item) => item >= 1 && item <= totalPages)
+    .sort((a, b) => a - b);
+
+  return visiblePages.flatMap((item, index) => (
+    index > 0 && item - visiblePages[index - 1] > 1 ? ["ellipsis", item] : [item]
+  ));
 }
 
 function pageHref(route, page) {
