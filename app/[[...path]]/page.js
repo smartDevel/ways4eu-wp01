@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
+import { normalizePageSize } from "@/lib/preferences";
 import ListView, { PostMeta } from "@/components/ListView";
 import ShareButtons from "@/components/ShareButtons";
 import WordPressComments from "@/components/WordPressComments";
@@ -41,8 +42,10 @@ export async function generateMetadata({ params, searchParams }) {
 
 export default async function CatchAllPage({ params, searchParams }) {
   const { path = [] } = await params;
-  const query = ((await searchParams)?.q || "").trim();
-  const route = classify(path, query);
+  const resolvedSearchParams = await searchParams;
+  const query = (resolvedSearchParams?.q || "").trim();
+  const perPage = normalizePageSize(resolvedSearchParams?.perPage);
+  const route = { ...classify(path, query), perPage };
 
   if (route.kind === "post") {
     const post = await getPost(route.slug);
@@ -61,8 +64,9 @@ export default async function CatchAllPage({ params, searchParams }) {
   return (
     <section className="content-container">
       {archive.heading && <h3 className="archive-heading">{archive.heading}</h3>}
-      <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} />
-      <Pagination route={route} totalPages={archive.totalPages} />
+      <Pagination route={route} totalPages={archive.totalPages} position="top" />
+      <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} postsPerPage={route.perPage} />
+      <Pagination route={route} totalPages={archive.totalPages} position="bottom" />
     </section>
   );
 }
@@ -70,7 +74,7 @@ export default async function CatchAllPage({ params, searchParams }) {
 async function resolveArchive(route) {
   if (route.kind === "home") {
     const [result, featured] = await Promise.all([
-      getPosts({ page: route.page, sticky: false }),
+      getPosts({ page: route.page, perPage: route.perPage, sticky: false }),
       route.page === 1 ? getStickyPosts() : Promise.resolve(null),
     ]);
     return result && {
@@ -83,7 +87,7 @@ async function resolveArchive(route) {
   if (route.kind === "taxonomy") {
     const term = await getTerm(route.taxonomy, route.slug);
     if (!term) return null;
-    const result = await getPosts({ page: route.page, [route.taxonomy]: term.id });
+    const result = await getPosts({ page: route.page, perPage: route.perPage, [route.taxonomy]: term.id });
     return result && {
       posts: result.data,
       totalPages: result.totalPages,
@@ -94,7 +98,7 @@ async function resolveArchive(route) {
   if (route.kind === "author") {
     const author = await getAuthor(route.slug);
     if (!author) return null;
-    const result = await getPosts({ page: route.page, author: author.id });
+    const result = await getPosts({ page: route.page, perPage: route.perPage, author: author.id });
     return result && {
       posts: result.data,
       totalPages: result.totalPages,
@@ -106,7 +110,7 @@ async function resolveArchive(route) {
     if (!route.query) {
       return { posts: [], totalPages: 1, heading: <>Search posts</> };
     }
-    const result = await getPosts({ page: route.page, search: route.query });
+    const result = await getPosts({ page: route.page, perPage: route.perPage, search: route.query });
     return result && {
       posts: result.data,
       totalPages: result.totalPages,
@@ -161,27 +165,63 @@ function SinglePage({ page }) {
   );
 }
 
-function Pagination({ route, totalPages }) {
+function Pagination({ route, totalPages, position }) {
   if (totalPages <= 1) return null;
   const page = route.page || 1;
+  const pages = paginationItems(page, totalPages);
+
   return (
-    <nav className="pagination" aria-label="Pagination">
-      {page < totalPages && <Link href={pageHref(route, page + 1)}>← Older posts</Link>}
-      {page < totalPages && page > 1 && " - "}
-      {page > 1 && <Link href={pageHref(route, page - 1)}>Newer posts →</Link>}
+    <nav className={`pagination pagination-${position}`} aria-label={`${position === "top" ? "Top" : "Bottom"} pagination`}>
+      <span className="pagination-summary">Page {page} of {totalPages}</span>
+      <div className="pagination-links">
+        {page > 1 && (
+          <Link className="pagination-direction" href={pageHref(route, page - 1)} aria-label={`Previous page, page ${page - 1}`}>
+            ← Previous
+          </Link>
+        )}
+        {pages.map((item, index) => item === "ellipsis" ? (
+          <span key={`ellipsis-${index}`} className="pagination-ellipsis" aria-hidden="true">…</span>
+        ) : item === page ? (
+          <span key={item} className="pagination-page is-current" aria-current="page" aria-label={`Page ${item}, current page`}>
+            {item}
+          </span>
+        ) : (
+          <Link key={item} className="pagination-page" href={pageHref(route, item)} aria-label={`Go to page ${item}`}>
+            {item}
+          </Link>
+        ))}
+        {page < totalPages && (
+          <Link className="pagination-direction" href={pageHref(route, page + 1)} aria-label={`Next page, page ${page + 1}`}>
+            Next →
+          </Link>
+        )}
+      </div>
     </nav>
   );
 }
 
+function paginationItems(page, totalPages) {
+  const visiblePages = [...new Set([1, totalPages, page - 2, page - 1, page, page + 1, page + 2])]
+    .filter((item) => item >= 1 && item <= totalPages)
+    .sort((a, b) => a - b);
+
+  return visiblePages.flatMap((item, index) => (
+    index > 0 && item - visiblePages[index - 1] > 1 ? ["ellipsis", item] : [item]
+  ));
+}
+
 function pageHref(route, page) {
+  const params = new URLSearchParams({ perPage: String(route.perPage) });
   if (route.kind === "search") {
     const base = page === 1 ? "/search/" : `/search/page/${page}/`;
-    return `${base}?q=${encodeURIComponent(route.query)}`;
+    params.set("q", route.query);
+    return `${base}?${params.toString()}`;
   }
   const base = route.kind === "home" ? "" : route.kind === "taxonomy"
     ? `/${route.taxonomy}/${route.slug}`
     : `/author/${route.slug}`;
-  return page === 1 ? `${base || "/"}/`.replace("//", "/") : `${base}/page/${page}/`;
+  const pathname = page === 1 ? `${base || "/"}/`.replace("//", "/") : `${base}/page/${page}/`;
+  return `${pathname}?${params.toString()}`;
 }
 
 function classify(path, query = "") {

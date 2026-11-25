@@ -74,8 +74,8 @@ export default function FavoritesView() {
     const failed = new Set();
     try {
       const batches = [];
-      for (let index = 0; index < missingIds.length; index += 100) {
-        batches.push(missingIds.slice(index, index + 100));
+      for (let index = 0; index < missingIds.length; index += 10) {
+        batches.push(missingIds.slice(index, index + 10));
       }
       const responses = await Promise.all(batches.map(async (batch) => {
         const response = await fetch(`/api/posts?ids=${batch.join(",")}`);
