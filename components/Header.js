@@ -81,7 +81,7 @@ export default function Header({ categories = [] }) {
 
       {browseOpen && (
         <div id="desktop-browse-panel" className="browse-panel desktop-browse-panel">
-          <BrowseFilters categories={categories} onNavigate={() => setBrowseOpen(false)} idPrefix="desktop" />
+          <BrowseFilters categories={categories} pathname={pathname} onNavigate={() => setBrowseOpen(false)} idPrefix="desktop" />
         </div>
       )}
 
@@ -95,7 +95,7 @@ export default function Header({ categories = [] }) {
             </button>
             {linksOpen && <ExternalLinks id="mobile-links-menu" className="mobile-links-menu" onNavigate={closeMobile} />}
             <h2 className="mobile-browse-heading">Browse &amp; search</h2>
-            <BrowseFilters categories={categories} onNavigate={closeMobile} idPrefix="mobile" />
+            <BrowseFilters categories={categories} pathname={pathname} onNavigate={closeMobile} idPrefix="mobile" />
             <div className="mobile-theme"><ColorSchemePicker /></div>
             <SocialLinks className="mobile-social" />
           </nav>
@@ -121,13 +121,20 @@ function FavoritesLink({ pathname, count, ready, onClick }) {
   );
 }
 
-function BrowseFilters({ categories, onNavigate, idPrefix }) {
+function BrowseFilters({ categories, pathname, onNavigate, idPrefix }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const categoryMatch = pathname.match(/^\/category\/([^/]+)/);
+  const selectedCategory = categoryMatch ? `/category/${categoryMatch[1]}/` : "";
+  const filterActive = /^\/(category|tag|search)\//.test(normalize(pathname));
 
   function navigate(event) {
     const href = event.target.value;
     if (!href) return;
+    if (href === "/") {
+      resetFilters();
+      return;
+    }
     router.push(href);
     onNavigate?.();
   }
@@ -137,6 +144,14 @@ function BrowseFilters({ categories, onNavigate, idPrefix }) {
     const query = searchQuery.trim();
     if (!query) return;
     router.push(`/search/?q=${encodeURIComponent(query)}`);
+    onNavigate?.();
+  }
+
+  function resetFilters() {
+    setSearchQuery("");
+    const currentParams = new URLSearchParams(window.location.search);
+    const perPage = currentParams.get("perPage");
+    router.push(perPage ? `/?perPage=${encodeURIComponent(perPage)}` : "/");
     onNavigate?.();
   }
 
@@ -152,8 +167,9 @@ function BrowseFilters({ categories, onNavigate, idPrefix }) {
 
       <label className="filter-field" htmlFor={`${idPrefix}-category-filter`}>
         Category
-        <select id={`${idPrefix}-category-filter`} defaultValue="" onChange={navigate}>
+        <select id={`${idPrefix}-category-filter`} value={selectedCategory} onChange={navigate}>
           <option value="">Choose a category…</option>
+          <option value="/">All posts (reset filters)</option>
           {categories.map((category) => (
             <option key={category.id} value={`/category/${category.slug}/`}>
               {category.name} ({category.count})
@@ -163,6 +179,18 @@ function BrowseFilters({ categories, onNavigate, idPrefix }) {
       </label>
 
       <TagFilter onNavigate={onNavigate} idPrefix={idPrefix} />
+
+      <div className="browse-reset-row">
+        <button
+          type="button"
+          className="filter-reset-button"
+          onClick={resetFilters}
+          disabled={!filterActive}
+          aria-label="Reset category, tag, and search filters; show all posts"
+        >
+          Reset filters · Show all posts
+        </button>
+      </div>
     </div>
   );
 }

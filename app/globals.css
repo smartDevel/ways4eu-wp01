@@ -152,6 +152,15 @@ button { font: inherit; }
 .search-control button:hover { background: #e0f8f7; }
 .browse-filters input:focus-visible, .browse-filters select:focus-visible, .browse-filters button:focus-visible { outline: 3px solid #ffeb3b; outline-offset: 2px; }
 .filter-message { display: block; min-height: 1.2em; margin-top: 4px; color: #ffeb3b; font-size: 0.75rem; }
+.browse-reset-row { display: flex; justify-content: flex-end; grid-column: 1 / -1; }
+.filter-reset-button {
+  min-height: 38px; padding: 7px 12px; border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 5px;
+  color: var(--header-start); background: var(--header-highlight); font-size: 0.78rem; font-weight: 800; cursor: pointer;
+}
+.filter-reset-button:hover { color: var(--header-text); background: transparent; }
+.filter-reset-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.filter-reset-button:disabled { opacity: 0.48; cursor: not-allowed; }
+.filter-reset-button:disabled:hover { color: var(--header-start); background: var(--header-highlight); }
 .menu-toggle {
   display: none; position: absolute; right: 18px; top: 21px; z-index: 5;
   width: 40px; height: 40px; border: 0; color: white; background: transparent;
