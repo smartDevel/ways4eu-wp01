@@ -3,20 +3,16 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { ColorSchemePicker } from "@/components/DisplayPreferences";
 import { useFavorites } from "@/components/FavoritesProvider";
 import { externalLinks, site, socialLinks } from "@/lib/config";
 
 export default function Header({ categories = [] }) {
   const pathname = usePathname();
   const { count, ready } = useFavorites();
-  const [dark, setDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
   const [linksOpen, setLinksOpen] = useState(false);
-
-  useEffect(() => {
-    document.body.dataset.theme = dark ? "dark" : "light";
-  }, [dark]);
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -42,7 +38,7 @@ export default function Header({ categories = [] }) {
 
         <div className="header-tools">
           <SocialLinks className="header-social" />
-          <ThemeSwitch dark={dark} setDark={setDark} />
+          <ColorSchemePicker />
         </div>
 
         <button
@@ -100,7 +96,7 @@ export default function Header({ categories = [] }) {
             {linksOpen && <ExternalLinks id="mobile-links-menu" className="mobile-links-menu" onNavigate={closeMobile} />}
             <h2 className="mobile-browse-heading">Browse &amp; search</h2>
             <BrowseFilters categories={categories} onNavigate={closeMobile} idPrefix="mobile" />
-            <div className="mobile-theme"><ThemeSwitch dark={dark} setDark={setDark} /></div>
+            <div className="mobile-theme"><ColorSchemePicker /></div>
             <SocialLinks className="mobile-social" />
           </nav>
         </div>
@@ -253,15 +249,6 @@ function SocialLinks({ className }) {
           <SocialIcon name={label} />
         </a>
       ))}
-    </div>
-  );
-}
-
-function ThemeSwitch({ dark, setDark }) {
-  return (
-    <div className="theme-switch" aria-label="Color scheme">
-      <button type="button" className={!dark ? "selected" : ""} aria-pressed={!dark} onClick={() => setDark(false)}>Light</button>
-      <button type="button" className={dark ? "selected" : ""} aria-pressed={dark} onClick={() => setDark(true)}>Dark</button>
     </div>
   );
 }

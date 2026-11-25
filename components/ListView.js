@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
+import { PostsPerPagePicker } from "@/components/DisplayPreferences";
 import { internalPath, postAuthor } from "@/lib/wp";
 
-export default function ListView({ posts, featuredPosts = [] }) {
+export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 }) {
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
   const [featuredOpen, setFeaturedOpen] = useState(false);
   const displayedPosts = [...featuredPosts, ...posts];
@@ -68,6 +69,7 @@ export default function ListView({ posts, featuredPosts = [] }) {
   return (
     <>
       <div className="post-list-controls">
+        <PostsPerPagePicker value={postsPerPage} />
         <button
           type="button"
           className="all-posts-toggle"
