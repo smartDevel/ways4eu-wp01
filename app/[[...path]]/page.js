@@ -69,13 +69,21 @@ export default async function CatchAllPage({ params, searchParams }) {
   return (
     <section className="content-container">
       {archive.heading && <h3 className="archive-heading">{archive.heading}</h3>}
+      {archive.activeFilter && (
+        <ActiveFilterStatus filter={archive.activeFilter} perPage={route.perPage} />
+      )}
       <TagCloudLayout
         tags={popularTags}
         activeTag={route.kind === "taxonomy" && route.taxonomy === "tag" ? route.slug : ""}
         perPage={route.perPage}
       >
         <Pagination route={route} totalPages={archive.totalPages} position="top" />
-        <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} postsPerPage={route.perPage} />
+        <ListView
+          posts={archive.posts}
+          featuredPosts={archive.featuredPosts}
+          postsPerPage={route.perPage}
+          filterActive={Boolean(archive.activeFilter)}
+        />
         <Pagination route={route} totalPages={archive.totalPages} position="bottom" />
       </TagCloudLayout>
     </section>
@@ -102,7 +110,10 @@ async function resolveArchive(route) {
     return result && {
       posts: result.data,
       totalPages: result.totalPages,
-      heading: <>{route.taxonomy}: <b>{term.name}</b></>,
+      activeFilter: {
+        label: route.taxonomy === "category" ? "Category" : "Tag",
+        value: term.name,
+      },
     };
   }
 
@@ -125,11 +136,33 @@ async function resolveArchive(route) {
     return result && {
       posts: result.data,
       totalPages: result.totalPages,
-      heading: <>Search results for: <b>{route.query}</b></>,
+      activeFilter: { label: "Search", value: route.query },
     };
   }
 
   return null;
+}
+
+function ActiveFilterStatus({ filter, perPage }) {
+  return (
+    <section className="active-filter-status" aria-labelledby="active-filter-heading">
+      <div className="active-filter-copy">
+        <span className="active-filter-eyebrow">Active filter</span>
+        <h2 id="active-filter-heading">
+          <span>{filter.label}</span>
+          <strong>{filter.value}</strong>
+        </h2>
+        <p>Only matching posts are currently shown.</p>
+      </div>
+      <Link
+        className="active-filter-reset"
+        href={`/?perPage=${perPage}`}
+        aria-label={`Reset ${filter.label.toLowerCase()} filter and show all posts`}
+      >
+        Reset filter · Show all posts
+      </Link>
+    </section>
+  );
 }
 
 async function SinglePost({ post, path, perPage }) {

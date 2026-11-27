@@ -9,7 +9,7 @@ import PostTaxonomy from "@/components/PostTaxonomy";
 import { PostsPerPagePicker } from "@/components/DisplayPreferences";
 import { internalPath } from "@/lib/wp";
 
-export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 }) {
+export default function ListView({ posts, featuredPosts = [], postsPerPage = 10, filterActive = false }) {
   const router = useRouter();
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
   const [featuredOpen, setFeaturedOpen] = useState(false);
@@ -139,7 +139,11 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
       <div className="post-list-controls">
         <PostsPerPagePicker value={postsPerPage} />
         <div className="post-list-actions">
-          <button type="button" className="reset-all-filters" onClick={resetAllFilters}>
+          <button
+            type="button"
+            className={`reset-all-filters${filterActive ? " is-active" : ""}`}
+            onClick={resetAllFilters}
+          >
             Reset all filters
           </button>
           <button
