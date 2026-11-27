@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPostsByIds } from "@/lib/wp";
+import { getPostsByIds, postTerms } from "@/lib/wp";
 
 export async function GET(request) {
   const ids = (new URL(request.url).searchParams.get("ids") || "")
@@ -13,10 +13,12 @@ export async function GET(request) {
   }
 
   try {
-    const posts = await getPostsByIds(ids);
+    const termsOnly = new URL(request.url).searchParams.get("mode") === "terms";
+    const posts = await getPostsByIds(ids, { includeContent: !termsOnly });
     return NextResponse.json(posts.map((post) => ({
       id: post.id,
-      content: post.content?.rendered || "",
+      ...(!termsOnly && { content: post.content?.rendered || "" }),
+      ...postTerms(post),
     })));
   } catch {
     return NextResponse.json({ error: "Posts are temporarily unavailable." }, { status: 502 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
+import { postTerms } from "@/lib/wp";
 
 const STORAGE_KEY = "curiosphere:favorites:v1";
 const STORE_EVENT = "curiosphere:favorites-change";
@@ -59,17 +60,14 @@ function normalizeFavorite(post) {
   const id = Number(post?.id);
   if (!Number.isFinite(id)) return null;
 
-  const author = post?.author || post?._embedded?.author?.[0] || null;
+  const terms = post?.terms || postTerms(post);
   return {
     id,
     title: textValue(post?.title),
     excerpt: textValue(post?.excerpt),
     path: localPostPath(post?.path || post?.link),
     date: typeof post?.date === "string" ? post.date : "",
-    author: author?.name ? {
-      name: author.name,
-      path: localPostPath(author.path || author.link),
-    } : null,
+    terms: normalizeTerms(terms),
     rating: normalizeRating(post?.rating),
   };
 }
@@ -118,13 +116,31 @@ function readFavorites(serialized = "[]") {
         excerpt: typeof item.excerpt === "string" ? item.excerpt : "",
         path: item.path,
         date: typeof item.date === "string" ? item.date : "",
-        author: item.author?.name ? item.author : null,
+        terms: normalizeTerms(item.terms),
         rating: normalizeRating(item.rating),
         savedAt: typeof item.savedAt === "string" ? item.savedAt : "",
       }));
   } catch {
     return [];
   }
+}
+
+function normalizeTerms(terms) {
+  return {
+    categories: normalizeTermList(terms?.categories),
+    tags: normalizeTermList(terms?.tags),
+  };
+}
+
+function normalizeTermList(terms) {
+  if (!Array.isArray(terms)) return [];
+  return [...new Map(terms
+    .filter((term) => Number.isFinite(Number(term?.id)) && term?.name && term?.slug)
+    .map((term) => [Number(term.id), {
+      id: Number(term.id),
+      name: String(term.name),
+      slug: String(term.slug),
+    }])).values()];
 }
 
 function normalizeRating(value) {

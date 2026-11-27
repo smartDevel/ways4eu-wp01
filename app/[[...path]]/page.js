@@ -2,12 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
+import PostTaxonomy from "@/components/PostTaxonomy";
 import { normalizePageSize } from "@/lib/preferences";
 import ListView, { PostMeta } from "@/components/ListView";
 import ShareButtons from "@/components/ShareButtons";
+import TagCloudLayout from "@/components/TagCloud";
 import WordPressComments from "@/components/WordPressComments";
 import { site } from "@/lib/config";
-import { getAuthor, getComments, getPage, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
+import { getAuthor, getComments, getPage, getPopularTags, getPost, getPosts, getStickyPosts, getTerm, internalPath } from "@/lib/wp";
 
 export async function generateMetadata({ params, searchParams }) {
   const { path = [] } = await params;
@@ -50,7 +52,7 @@ export default async function CatchAllPage({ params, searchParams }) {
   if (route.kind === "post") {
     const post = await getPost(route.slug);
     if (!post) notFound();
-    return <SinglePost post={post} path={`/${path.join("/")}/`} />;
+    return <SinglePost post={post} path={`/${path.join("/")}/`} perPage={route.perPage} />;
   }
 
   if (route.kind === "page") {
@@ -58,15 +60,24 @@ export default async function CatchAllPage({ params, searchParams }) {
     if (page) return <SinglePage page={page} />;
   }
 
-  const archive = await resolveArchive(route);
+  const [archive, popularTags] = await Promise.all([
+    resolveArchive(route),
+    getPopularTags(),
+  ]);
   if (!archive) notFound();
 
   return (
     <section className="content-container">
       {archive.heading && <h3 className="archive-heading">{archive.heading}</h3>}
-      <Pagination route={route} totalPages={archive.totalPages} position="top" />
-      <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} postsPerPage={route.perPage} />
-      <Pagination route={route} totalPages={archive.totalPages} position="bottom" />
+      <TagCloudLayout
+        tags={popularTags}
+        activeTag={route.kind === "taxonomy" && route.taxonomy === "tag" ? route.slug : ""}
+        perPage={route.perPage}
+      >
+        <Pagination route={route} totalPages={archive.totalPages} position="top" />
+        <ListView posts={archive.posts} featuredPosts={archive.featuredPosts} postsPerPage={route.perPage} />
+        <Pagination route={route} totalPages={archive.totalPages} position="bottom" />
+      </TagCloudLayout>
     </section>
   );
 }
@@ -102,7 +113,7 @@ async function resolveArchive(route) {
     return result && {
       posts: result.data,
       totalPages: result.totalPages,
-      heading: <>Author: <b>{author.name}</b></>,
+      heading: <>Author archive</>,
     };
   }
 
@@ -121,25 +132,17 @@ async function resolveArchive(route) {
   return null;
 }
 
-async function SinglePost({ post, path }) {
-  const author = post._embedded?.author?.[0];
+async function SinglePost({ post, path, perPage }) {
   const comments = await getComments(post.id);
-  const favoritePost = {
-    id: post.id,
-    title: post.title,
-    excerpt: post.excerpt,
-    link: post.link,
-    date: post.date,
-    author: author ? { name: author.name, link: author.link } : null,
-  };
 
   return (
     <article className="content-container single-post">
       <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
       <PostMeta post={post} />
+      <PostTaxonomy post={post} perPage={perPage} />
       <div className="favorite-actions">
-        <FavoriteButton post={favoritePost} />
-        <FavoriteRating post={favoritePost} />
+        <FavoriteButton post={post} />
+        <FavoriteRating post={post} />
       </div>
       <div className="wp-content" dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
       <ShareButtons

@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
+import PostTaxonomy from "@/components/PostTaxonomy";
 import { PostsPerPagePicker } from "@/components/DisplayPreferences";
-import { internalPath, postAuthor } from "@/lib/wp";
+import { internalPath } from "@/lib/wp";
 
 export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 }) {
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
@@ -87,7 +88,6 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
   }
 
   function renderPost(post, featured = false) {
-    const author = postAuthor(post);
     const isExpanded = expandedPosts.has(post.id);
     const contentId = `post-content-${post.id}`;
     return (
@@ -95,7 +95,8 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
         <Link href={internalPath(post.link)}>
           <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
         </Link>
-        <PostMeta post={post} author={author} />
+        <PostMeta post={post} />
+        <PostTaxonomy post={post} perPage={postsPerPage} />
         <div className="favorite-actions">
           <FavoriteButton post={post} />
           <FavoriteRating post={post} />
@@ -181,12 +182,11 @@ function PostFullContent({ content, failed, loading, path, retry }) {
   return <div className="wp-content" dangerouslySetInnerHTML={{ __html: content }} />;
 }
 
-export function PostMeta({ post, author = postAuthor(post) }) {
+export function PostMeta({ post }) {
   const date = new Date(post.date);
   return (
     <div className="post-meta">
-      {author && <Link href={internalPath(author.link)}>By <b>{author.name}</b></Link>}{" "}
-      on <b>{date.toDateString()}</b>
+      Published on <b>{date.toDateString()}</b>
     </div>
   );
 }

@@ -3,9 +3,10 @@
 import Link from "next/link";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
+import PostTaxonomy from "@/components/PostTaxonomy";
 import { useFavorites } from "@/components/FavoritesProvider";
 import ShareButtons from "@/components/ShareButtons";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function FavoritesView() {
   const { favorites, ready } = useFavorites();
@@ -15,6 +16,7 @@ export default function FavoritesView() {
   const [postContent, setPostContent] = useState(() => new Map());
   const [loadingPosts, setLoadingPosts] = useState(() => new Set());
   const [failedPosts, setFailedPosts] = useState(() => new Set());
+  const [remoteTerms, setRemoteTerms] = useState(() => new Map());
   const loadingPostsRef = useRef(new Set());
   const postContentRef = useRef(new Map());
   const visibleFavorites = useMemo(() => {
@@ -32,7 +34,35 @@ export default function FavoritesView() {
     });
   }, [favorites, ratingFilter, sortBy]);
   const visibleIds = visibleFavorites.map((favorite) => favorite.id);
+  const favoriteIdsKey = favorites.map((favorite) => favorite.id).sort((a, b) => a - b).join(",");
   const allVisibleExpanded = visibleIds.length > 0 && visibleIds.every((id) => expandedPosts.has(id));
+
+  useEffect(() => {
+    if (!ready || !favoriteIdsKey) return;
+    const controller = new AbortController();
+
+    async function loadTerms() {
+      try {
+        const ids = favoriteIdsKey.split(",").map(Number);
+        const batches = [];
+        for (let index = 0; index < ids.length; index += 100) batches.push(ids.slice(index, index + 100));
+        const responses = await Promise.all(batches.map(async (batch) => {
+          const response = await fetch(`/api/posts?mode=terms&ids=${batch.join(",")}`, { signal: controller.signal });
+          if (!response.ok) throw new Error("Taxonomy request failed");
+          return response.json();
+        }));
+        setRemoteTerms(new Map(responses.flat().map((post) => [Number(post.id), {
+          categories: post.categories || [],
+          tags: post.tags || [],
+        }])));
+      } catch (error) {
+        if (error.name !== "AbortError") setRemoteTerms(new Map());
+      }
+    }
+
+    loadTerms();
+    return () => controller.abort();
+  }, [favoriteIdsKey, ready]);
 
   function togglePost(postId) {
     const opening = !expandedPosts.has(postId);
@@ -179,6 +209,7 @@ export default function FavoritesView() {
             <FavoriteButton post={favorite} />
           </div>
           <FavoriteMeta favorite={favorite} />
+          <PostTaxonomy terms={hasTerms(favorite.terms) ? favorite.terms : remoteTerms.get(favorite.id)} />
           <FavoriteRating post={favorite} />
           <button
             type="button"
@@ -231,11 +262,14 @@ function FavoriteMeta({ favorite }) {
 
   return (
     <p className="favorite-meta">
-      {favorite.author?.name && <>By <b>{favorite.author.name}</b>{published ? " · " : ""}</>}
-      {published && <>Published {published}</>}
+      {published && <>Published on {published}</>}
       {saved && <span>Saved {saved}</span>}
     </p>
   );
+}
+
+function hasTerms(terms) {
+  return (terms?.categories?.length || 0) + (terms?.tags?.length || 0) > 0;
 }
 
 function formatDate(value) {
