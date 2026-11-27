@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
@@ -9,6 +10,7 @@ import { PostsPerPagePicker } from "@/components/DisplayPreferences";
 import { internalPath } from "@/lib/wp";
 
 export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 }) {
+  const router = useRouter();
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
   const [featuredOpen, setFeaturedOpen] = useState(false);
   const [postContent, setPostContent] = useState(() => new Map());
@@ -40,6 +42,10 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
       if (featuredPosts.length > 0) setFeaturedOpen(true);
       loadPostContent(displayedPosts.map((post) => post.id));
     }
+  }
+
+  function resetAllFilters() {
+    router.push(`/?perPage=${postsPerPage}`);
   }
 
   async function loadPostContent(postIds) {
@@ -132,15 +138,20 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
     <>
       <div className="post-list-controls">
         <PostsPerPagePicker value={postsPerPage} />
-        <button
-          type="button"
-          className="all-posts-toggle"
-          aria-expanded={allExpanded}
-          aria-controls={displayedPosts.map((post) => `post-content-${post.id}`).join(" ")}
-          onClick={toggleAllPosts}
-        >
-          {allExpanded ? "Collapse all posts" : "Expand all posts"}
-        </button>
+        <div className="post-list-actions">
+          <button type="button" className="reset-all-filters" onClick={resetAllFilters}>
+            Reset all filters
+          </button>
+          <button
+            type="button"
+            className="all-posts-toggle"
+            aria-expanded={allExpanded}
+            aria-controls={displayedPosts.map((post) => `post-content-${post.id}`).join(" ")}
+            onClick={toggleAllPosts}
+          >
+            {allExpanded ? "Collapse all posts" : "Expand all posts"}
+          </button>
+        </div>
       </div>
       {featuredPosts.length > 0 && (
         <section className="featured-posts" aria-labelledby="featured-heading">

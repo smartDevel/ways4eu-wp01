@@ -97,7 +97,11 @@ function TagCloud({ tags, activeTag, perPage, position }) {
 
 function popularityLevel(count, minimum, maximum) {
   if (maximum === minimum) return 3;
-  return Math.min(5, Math.max(1, Math.round(((count - minimum) / (maximum - minimum)) * 4) + 1));
+  const logarithmicCount = Math.log1p(count);
+  const logarithmicMinimum = Math.log1p(minimum);
+  const logarithmicMaximum = Math.log1p(maximum);
+  const ratio = (logarithmicCount - logarithmicMinimum) / (logarithmicMaximum - logarithmicMinimum);
+  return Math.min(5, Math.max(1, Math.round(ratio * 4) + 1));
 }
 
 function useTagCloudPosition() {
