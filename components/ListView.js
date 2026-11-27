@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import FavoriteButton from "@/components/FavoriteButton";
 import FavoriteRating from "@/components/FavoriteRating";
+import PostTaxonomy from "@/components/PostTaxonomy";
 import { PostsPerPagePicker } from "@/components/DisplayPreferences";
-import { internalPath, postAuthor } from "@/lib/wp";
+import { internalPath } from "@/lib/wp";
 
-export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 }) {
+export default function ListView({ posts, featuredPosts = [], postsPerPage = 10, filterActive = false }) {
+  const router = useRouter();
   const [expandedPosts, setExpandedPosts] = useState(() => new Set());
   const [featuredOpen, setFeaturedOpen] = useState(false);
   const [postContent, setPostContent] = useState(() => new Map());
@@ -39,6 +42,10 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
       if (featuredPosts.length > 0) setFeaturedOpen(true);
       loadPostContent(displayedPosts.map((post) => post.id));
     }
+  }
+
+  function resetAllFilters() {
+    router.push(`/?perPage=${postsPerPage}`);
   }
 
   async function loadPostContent(postIds) {
@@ -87,7 +94,6 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
   }
 
   function renderPost(post, featured = false) {
-    const author = postAuthor(post);
     const isExpanded = expandedPosts.has(post.id);
     const contentId = `post-content-${post.id}`;
     return (
@@ -95,7 +101,8 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
         <Link href={internalPath(post.link)}>
           <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
         </Link>
-        <PostMeta post={post} author={author} />
+        <PostMeta post={post} />
+        <PostTaxonomy post={post} perPage={postsPerPage} />
         <div className="favorite-actions">
           <FavoriteButton post={post} />
           <FavoriteRating post={post} />
@@ -131,15 +138,24 @@ export default function ListView({ posts, featuredPosts = [], postsPerPage = 10 
     <>
       <div className="post-list-controls">
         <PostsPerPagePicker value={postsPerPage} />
-        <button
-          type="button"
-          className="all-posts-toggle"
-          aria-expanded={allExpanded}
-          aria-controls={displayedPosts.map((post) => `post-content-${post.id}`).join(" ")}
-          onClick={toggleAllPosts}
-        >
-          {allExpanded ? "Collapse all posts" : "Expand all posts"}
-        </button>
+        <div className="post-list-actions">
+          <button
+            type="button"
+            className={`reset-all-filters${filterActive ? " is-active" : ""}`}
+            onClick={resetAllFilters}
+          >
+            Reset all filters
+          </button>
+          <button
+            type="button"
+            className="all-posts-toggle"
+            aria-expanded={allExpanded}
+            aria-controls={displayedPosts.map((post) => `post-content-${post.id}`).join(" ")}
+            onClick={toggleAllPosts}
+          >
+            {allExpanded ? "Collapse all posts" : "Expand all posts"}
+          </button>
+        </div>
       </div>
       {featuredPosts.length > 0 && (
         <section className="featured-posts" aria-labelledby="featured-heading">
@@ -181,12 +197,11 @@ function PostFullContent({ content, failed, loading, path, retry }) {
   return <div className="wp-content" dangerouslySetInnerHTML={{ __html: content }} />;
 }
 
-export function PostMeta({ post, author = postAuthor(post) }) {
+export function PostMeta({ post }) {
   const date = new Date(post.date);
   return (
     <div className="post-meta">
-      {author && <Link href={internalPath(author.link)}>By <b>{author.name}</b></Link>}{" "}
-      on <b>{date.toDateString()}</b>
+      Published on <b>{date.toDateString()}</b>
     </div>
   );
 }
