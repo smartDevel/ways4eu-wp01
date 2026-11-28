@@ -276,7 +276,7 @@ main {
 .taxonomy-list a:hover { color: var(--accent-contrast); border-color: var(--accent); background: var(--accent); }
 .taxonomy-list a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .tag-cloud-preference {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 7px 10px; margin: 0 0 16px; padding: 12px 14px;
+  display: none; align-items: center; flex-wrap: wrap; gap: 7px 10px; margin: 0 0 16px; padding: 12px 14px;
   border: 1px solid var(--border); border-radius: 9px; color: var(--text-soft); background: var(--surface-soft);
 }
 .tag-cloud-preference label { font-size: 0.78rem; font-weight: 800; }
@@ -601,6 +601,7 @@ main {
   .header-social { display: none; }
 }
 @media (min-width: 1280px) {
+  .tag-cloud-preference { display: flex; }
   .archive-layout.tag-cloud-left,
   .archive-layout.tag-cloud-right { display: grid; grid-template-columns: minmax(210px, 270px) minmax(0, 1fr); gap: clamp(26px, 2.5vw, 42px); align-items: start; }
   .archive-layout.tag-cloud-right { grid-template-columns: minmax(0, 1fr) minmax(210px, 270px); }
